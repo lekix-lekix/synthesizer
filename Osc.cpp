@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 22:42:44 by lekix             #+#    #+#             */
-/*   Updated: 2026/05/25 16:49:27 by lekix            ###   ########.fr       */
+/*   Updated: 2026/05/26 17:11:39 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 // Sample it 44100 times / second ?
 // send it to sound card ---> OS : audio API, MCU : send to DAC
 
-#include "./synthesizer.h"
-#include "./Osc.hpp"
+#include "./synthesizer.hpp"
+
+constexpr float PI      = 3.14159;
+constexpr float TWO_PI  = 2.0f * PI;
 
 float Osc::renderFrame() {
+    this->phase += TWO_PI * this->freq / SAMPLE_RATE;
+    if (this->phase >= TWO_PI) this->phase -= TWO_PI;
     switch (this->waveType)
     {
         case SINE:
@@ -33,18 +37,18 @@ float Osc::renderFrame() {
             break;
             
         default:
-            break;
+            return -1;
     }
 }
 
+float Osc::square() {
+    return phase < PI ? this->amp * 1.0f : this->amp * -1.0f;
+}
+
+float Osc::saw() { 
+    return phase * 2.0f - 1.0f;x`
+}
+
 float Osc::sine() {
-    // for (auto &frame : this->buffer) { // buffer size == BUFFER_FRAMES -> bounded
-        // this->phase += (twoPI * this->freq / SAMPLE_RATE);
-        // if (this->phase >= twoPI) this->phase -= twoPI;
-        // frame = this->amp * sin(this->phase);
-    // }
-    // return 0;
-    this->phase += twoPI * this->freq / SAMPLE_RATE;
-    if (this->phase >= twoPI) this->phase -= twoPI;
-    return this->amp * sin(this->phase);
+    return this->amp * sinf(this->phase);
 }

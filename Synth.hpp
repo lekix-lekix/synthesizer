@@ -6,14 +6,15 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 23:02:05 by lekix             #+#    #+#             */
-/*   Updated: 2026/05/25 17:10:44 by lekix            ###   ########.fr       */
+/*   Updated: 2026/05/26 15:59:08 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./Osc.hpp"
-#include <vector>
+#include "./synthesizer.hpp"
 #include <array>
 #include <memory>
+
+// constexpr uint8_t MAX_OSC = 3;
 
 class Synth
 {
@@ -29,7 +30,9 @@ class Synth
         Synth &operator=(const Synth &other) = default;
         Synth &operator=(Synth &&other) = default;
     
-        void addOsc(std::unique_ptr<Osc> osc);
-        void render();
+        void                        addOsc(std::unique_ptr<Osc> osc);
+        std::unique_ptr<Osc> const  &getOsc(int idx) { return this->oscillators_[idx]; };
+        void                        render();
+
         std::array<float, BUFFER_FRAMES> &getBuffer() { return this->buffer_; };
 };

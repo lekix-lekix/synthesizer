@@ -6,22 +6,14 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 16:41:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/05/25 16:50:39 by lekix            ###   ########.fr       */
+/*   Updated: 2026/05/26 16:58:31 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <array>
 #include <cmath>
-#include "./synthesizer.h"
-
-// using WaveFunc = float(*)(float);  // type : pointeur vers fonction float(float)
-
-// constexpr WaveFunc waveTable[] = { 
-//     [](float p) { return sinf(p); },
-//     [](float p) { return p > 0.5f ? 1.0f : -1.0f; },
-//     [](float p) { return 2.0f * p - 1.0f; }
-// };
+#include "./synthesizer.hpp"
 
 enum wave {
     SINE,
@@ -30,11 +22,11 @@ enum wave {
     // TRIANGLE
 };
 
-class Osc {
+class Osc {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
     private:
         wave    waveType = { SINE };
         float   freq = { 440.0f };
-        float   amp = { 0.5f };
+        float   amp = { 0.2f };   // will go into VCA
         float   phase = { 0 };
         
     public:
@@ -50,5 +42,9 @@ class Osc {
         float   square();
         float   saw();
 
+        void    setFreq(float newFreq) { this->freq = newFreq; };
+        void    setAmp(float newAmp) { this->amp = newAmp; };
+        void    setWave(wave newWaveType) { this->waveType = newWaveType; }; 
         void    incFreq() { this->freq++; };
+        void    decFreq() { this->freq--; };
 };
