@@ -6,14 +6,16 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 16:41:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/05/26 16:58:31 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/02 17:12:56 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 #include <vector>
 #include <array>
 #include <cmath>
-#include "./synthesizer.hpp"
+#include "synthesizer.hpp"
 
 enum wave {
     SINE,
@@ -26,7 +28,7 @@ class Osc {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
     private:
         wave    waveType = { SINE };
         float   freq = { 440.0f };
-        float   amp = { 0.2f };   // will go into VCA
+        // float   amp = { 0.5f };   // will go into VCA
         float   phase = { 0 };
         
     public:
@@ -43,7 +45,6 @@ class Osc {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
         float   saw();
 
         void    setFreq(float newFreq) { this->freq = newFreq; };
-        void    setAmp(float newAmp) { this->amp = newAmp; };
         void    setWave(wave newWaveType) { this->waveType = newWaveType; }; 
         void    incFreq() { this->freq++; };
         void    decFreq() { this->freq--; };

@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/30 14:22:38 by lekix             #+#    #+#             */
-/*   Updated: 2026/05/31 00:38:13 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/02 15:20:22 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 #include <iostream>
 #include <cuchar>
 #include <array>
+#include <atomic>
 
 template <typename T, std::size_t N>
 class CircularBuffer {
     private:
-        std::array<T, N> buffer_;
-        std::size_t head_ = {0};
-        std::size_t tail_ = {0};
+        std::array<T, N>    buffer_;
+        alignas(64) std::atomic<size_t> head_ = 0;
+        alignas(64) std::atomic<size_t> tail_ = 0;
 
     public:
         CircularBuffer() = default;
@@ -38,23 +39,25 @@ class CircularBuffer {
 
 template <typename T, std::size_t N>
 bool CircularBuffer<T, N>::write(const T &value) {
-    auto new_head = this->head_ + 1;
+    auto new_head = this->head_.load() + 1;
     if (new_head == buffer_.size())
-    new_head = 0;
-    if (new_head == this->tail_)
-    return false;
+        new_head = 0;
+    if (new_head == this->tail_.load())
+        return false;
     this->buffer_[new_head] = value;
-    this->head_ = new_head;
+    this->head_.store(new_head);
     return true;
 }
 
 template <typename T, std::size_t N>
 bool CircularBuffer<T, N>::read(T &value) {
-    if (this->tail_ == this->head_)
+    const auto tail = this->tail_.load();
+    if (tail_ == head_.load())
         return false;
-    value = this->buffer_[this->tail_];
-    this->tail_ += 1;
-    if (this->tail_ == this->buffer_.size())
-        this->tail_ = 0;
+    value = this->buffer_[tail];
+    auto next_tail = tail + 1;
+    if (next_tail == this->buffer_.size())
+        next_tail = 0;
+    this->tail_.store(next_tail);
     return true;
 }

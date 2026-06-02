@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   synthesizer.hpp                                    :+:      :+:    :+:   */
+/*   AudioModule.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/21 23:03:38 by lekix             #+#    #+#             */
-/*   Updated: 2026/05/26 15:15:46 by lekix            ###   ########.fr       */
+/*   Created: 2026/06/02 17:08:05 by lekix             #+#    #+#             */
+/*   Updated: 2026/06/02 17:09:33 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <iostream>
-
-#include "constants.hpp"
-#include "Osc.hpp"
-#include "Synth.hpp"
-
+class AudioModule {
+    private:
+        /* data */
+    public:
+        AudioModule();
+        ~AudioModule();
+};

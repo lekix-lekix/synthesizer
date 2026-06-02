@@ -6,44 +6,44 @@
 #    By: lekix <lekix@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 16:29:27 by kipouliq          #+#    #+#              #
-#    Updated: 2026/06/02 17:10:43 by lekix            ###   ########.fr        #
+#    Updated: 2026/06/02 15:31:12 by lekix            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = a.out
-
-CXX = c++ -D__LINUX_ALSA__ 
-
-FLAGS = -Wall -Wextra -Werror -g3 -O3
-
-LIBFLAGS = -lpthread -lasound
-
-SRCS = rtaudio/RtAudio.cpp \
-		src/Synth.cpp \
-		src/Osc.cpp \
-		src/main.cpp
-
-OBJS = $(SRCS:.cpp=.o)
+NAME     = a.out
+NAME_LIB = lbuffer.a
+SANITIZE = a.out_san
+CXX      = c++
+FLAGS    = -Wall -Wextra -Werror -g3 -O3
+SAN_FLAG = -fsanitize=thread
+SRCS     = main.cpp
+OBJS     = $(SRCS:.cpp=.o)
 
 all: $(NAME)
 
-$(OBJS_PATH):
-	mkdir -p $(OBJS_PATH)
-
-$(OBJS_PATH)%.o: $(SCRS)%.cpp
-	$(CXX) $(FLAGS) -c $< -o $@ 
+%.o: %.cpp
+	$(CXX) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-# 	cd rtaudio && ./autogen.sh && make
-	$(CXX) $(FLAGS) $(OBJS) -o $@ $(LIBFLAGS)
+	$(CXX) $(FLAGS) $(OBJS) -o $@ 
+
+$(SANITIZE): $(OBJS)
+	$(CXX) $(FLAGS) $(OBJS) -o $@ $(SAN_FLAG)
+
+$(NAME_LIB): $(OBJS)
+	ar -rcs $@ $(OBJ)
+
+san: $(SANITIZE)
+
+lib: $(NAME_LIB)
 
 clean:
 	rm -rf ./*.o
 
-fclean:	clean
-	rm -f $(NAME)
+fclean: clean
+	rm -f $(NAME) $(SANITIZE)
 
 re: fclean
 	make all
 
-.PHONY: all clean fclean re
+.PHONY: all san clean fclean re
