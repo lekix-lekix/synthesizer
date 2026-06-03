@@ -5,43 +5,46 @@
 #include <cassert>
 #include <unistd.h>
 
-using us = std::chrono::microseconds;
+using us = std::chrono::nanoseconds;
 using Time = std::chrono::steady_clock;
 
 int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
-        double streamTime, RtAudioStreamStatus status, void *userData) {
+                  double streamTime, RtAudioStreamStatus status, void *userData)
+{
+    (void)inputBuffer;
+    (void)streamTime;
+    (void)status;
 
-    (void) inputBuffer;
-    (void) streamTime;
-    (void) status;
-    
-    auto start = Time::now();
+    // auto start = Time::now();
     double *outBuffer = (double *)outputBuffer;
     Synth *self = static_cast<Synth *>(userData);
 
-    CircularBuffer<float, BUFFER_FRAMES> &oscBuff = self->getBuffer();
-
-    // float prev;
-    for (unsigned int i = 0; i < nBufferFrames; i++) {
-        self->render();
-        float frame = -1;
-        oscBuff.read(frame);
-        // std::cout << frame << std::endl;
-        assert(!std::isnan(frame));
-        assert(!std::isinf(frame));
+    for (unsigned int i = 0; i < nBufferFrames; i++)
+    {
+        float frame = self->render();
+        // auto stop1 = Time::now();
+        // audioBuff.read(frame);
+        // auto stop2 = Time::now();
+        // std::cout << "read time = " << std::chrono::duration_cast<us>(stop2 - stop1).count() << std::endl;
+        // assert(!std::isnan(frame));
+        // assert(!std::isinf(frame));
         // assert(std::abs(frame) <= 1.0f); // clipping check
-        
+
         // Détecter les sauts brutaux
         // if (i > 2) {
         //     float delta = std::abs(frame - prev);
         //     assert(delta < 0.5f); // seuil à ajuster
         // }
         *outBuffer++ = frame;
+        // std::cout << "frame = " << frame << std::endl;
         // prev = frame;
     }
-    auto end = Time::now();
-    auto time_elapsed = std::chrono::duration_cast<us>(end - start).count();
-    assert(time_elapsed < DEADLINE_US);
+    // auto end = Time::now();
+    // auto time_elapsed = std::chrono::duration_cast<us>(end - start).count();
+    // std::cout << "time_elapsed = " << time_elapsed << std::endl;
+    // (void) time_elapsed;
+    // std::cout << "AudioCallback : " << time_elapsed << std::endl;
+    // assert(time_elapsed < DEADLINE_US);
     return (0);
 }
 
@@ -63,22 +66,25 @@ int main()
 
     Synth synth;
 
-    synth.addOsc(std::make_unique<Osc>());
-    synth.addOsc(std::make_unique<Osc>());
-    synth.addOsc(std::make_unique<Osc>());
+    synth.addAudioModule(std::make_unique<Osc>(261.626f));
+    synth.addAudioModule(std::make_unique<Osc>(311.127f));
+    synth.addAudioModule(std::make_unique<VCA>(0.4f));
 
-    // synth.getOsc(0)->setWave(SAW); 
-    // synth.getOsc(1)->setWave(SAW); 
-    // synth.getOsc(2)->setWave(SAW); 
-    // 
-    synth.getOsc(0)->setFreq(261.626f);
-    synth.getOsc(1)->setFreq(311.127f); // C minor
+    // synth.getOsc(0)->setFreq(261.626f);
+    // synth.getOsc(1)->setFreq(311.127f); // C minor
+
+
+    // synth.getOsc(0)->setWave(SAW);
+    // synth.getOsc(1)->setWave(SAW);
+    // synth.getOsc(2)->setWave(SAW);
+    //
+
     // synth.getOsc(2)->setFreq(391.995f);
 
     params.deviceId = audio.getDefaultOutputDevice();
     params.nChannels = 1;
     params.firstChannel = 0;
-    unsigned int sampleRate = SAMPLE_RATE; // freq d'echantillonnage
+    unsigned int sampleRate = SAMPLE_RATE;     // freq d'echantillonnage
     unsigned int bufferFrames = BUFFER_FRAMES; // sample frames
 
     if (audio.openStream(&params, NULL, RTAUDIO_FLOAT64, sampleRate,
@@ -88,7 +94,6 @@ int main()
                   << audio.getErrorText() << '\n'
                   << std::endl;
     }
-
 
     // Stream is open ... now start it.
     if (audio.startStream())
@@ -108,7 +113,6 @@ int main()
     //     synth.getOsc(0)->decFreq();
     // }
 
-    
     std::cin.get(input);
 
     // Block released ... stop the stream
@@ -119,5 +123,6 @@ cleanup:
     if (audio.isStreamOpen())
         audio.closeStream();
 
+    // DSP.join();
     return 0;
 }

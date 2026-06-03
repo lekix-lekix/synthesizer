@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 22:42:44 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/02 17:13:24 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/03 15:28:37 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 constexpr float PI      = 3.14159;
 constexpr float TWO_PI  = 2.0f * PI;
 
-float Osc::renderFrame() {
+float Osc::render(float signal) {
     this->phase += TWO_PI * this->freq / SAMPLE_RATE;
     if (this->phase >= TWO_PI) this->phase -= TWO_PI;
     switch (this->waveType) {
         case SINE:
-            return this->sine();
+            return sinf(this->phase) + signal;
             break;
 
         case SQUARE:

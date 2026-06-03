@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/30 14:22:38 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/02 15:20:22 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/03 13:20:30 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class CircularBuffer {
 
         bool    write(const T &value);
         bool    read(T & value);
+        bool    isFull();
 
 };
 
@@ -43,9 +44,13 @@ bool CircularBuffer<T, N>::write(const T &value) {
     if (new_head == buffer_.size())
         new_head = 0;
     if (new_head == this->tail_.load())
+    {
+        // std::cout << "full\n";
         return false;
+    }
     this->buffer_[new_head] = value;
     this->head_.store(new_head);
+    // std::cout << "filled\n";
     return true;
 }
 
@@ -60,4 +65,12 @@ bool CircularBuffer<T, N>::read(T &value) {
         next_tail = 0;
     this->tail_.store(next_tail);
     return true;
+}
+
+template <typename T, std::size_t N>
+bool CircularBuffer<T, N>::isFull() {
+    const auto new_head = this->head_.load() + 1;
+    if (new_head == this->tail_.load())
+        return true;
+    return false;
 }

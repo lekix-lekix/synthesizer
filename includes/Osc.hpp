@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 16:41:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/02 17:12:56 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/03 15:33:11 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,23 @@ enum wave {
     // TRIANGLE
 };
 
-class Osc {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
+class Osc : public AudioModule {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
     private:
         wave    waveType = { SINE };
         float   freq = { 440.0f };
-        // float   amp = { 0.5f };   // will go into VCA
         float   phase = { 0 };
         
     public:
         Osc() = default;
         ~Osc() = default;
-        Osc(Osc const &other) = default;
+        Osc(const Osc &other) = default;
         Osc(Osc &&other) = default;
-        Osc &operator=(Osc const &other) = default;
+        Osc &operator=(const Osc &other) = default;
         Osc &operator=(Osc &&other) = default;
 
-        float   renderFrame();
+        Osc(const float &freq) { this->freq = freq; };
+
+        float   render(float signal = 0.f) override;
         float   sine();
         float   square();
         float   saw();
