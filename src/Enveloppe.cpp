@@ -1,0 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Enveloppe.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/04 16:49:59 by lekix             #+#    #+#             */
+/*   Updated: 2026/06/04 17:16:42 by lekix            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Enveloppe.hpp"
+
+float Enveloppe::render(float signal) {
+    
+}
+
+// v[n+1] = v[n] + (b2 ​− b1​​) / N -> linear enveloppe
+
+// v[n]	            Valeur de la rampe à l'échantillon n. C'est la quantité que l'on calcule au fil du temps.
+// n	            Indice d'échantillon (0, 1, 2, 3, ...).
+// v[0]	            Valeur initiale de la rampe.
+// b1               Valeur de départ (begin value).
+// b2               Valeur d'arrivée (end value).
+// N	            Nombre de pas (ou durée de la transition en échantillons).
+// (b2 - b1)	    Amplitude totale du changement à effectuer.
+// (b2 - b1) / N    Incrément ajouté à chaque échantillon. On l'appelle parfois step size ou slope.
+
+// N = Fs * t où :
+// Fs = fréquence d'échantillonnage (samples/s)
+// t = durée souhaitée (s)
+
+float Enveloppe::linear(float signal) {
+    
+}

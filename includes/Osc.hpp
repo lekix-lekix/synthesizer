@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 16:41:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/03 15:33:11 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/04 16:42:18 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <cmath>
 #include "synthesizer.hpp"
 
-enum wave {
+enum e_wave {
     SINE,
     SQUARE,
     SAW,
@@ -26,7 +26,7 @@ enum wave {
 
 class Osc : public AudioModule {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
     private:
-        wave    waveType = { SINE };
+        e_wave    waveType = { SINE };
         float   freq = { 440.0f };
         float   phase = { 0 };
         
@@ -38,15 +38,16 @@ class Osc : public AudioModule {         // to do : Osc (interface) -> SineOsc, 
         Osc &operator=(const Osc &other) = default;
         Osc &operator=(Osc &&other) = default;
 
-        Osc(const float &freq) { this->freq = freq; };
+        Osc(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {};
+        Osc(const float &freq, const uint64_t totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->freq = freq; };
 
-        float   render(float signal = 0.f) override;
         float   sine();
         float   square();
         float   saw();
+        float   render(float signal = 0.f) override;
 
         void    setFreq(float newFreq) { this->freq = newFreq; };
-        void    setWave(wave newWaveType) { this->waveType = newWaveType; }; 
+        void    setWave(e_wave newWaveType) { this->waveType = newWaveType; }; 
         void    incFreq() { this->freq++; };
         void    decFreq() { this->freq--; };
 };

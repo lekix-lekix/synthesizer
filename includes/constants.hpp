@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:03:19 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/03 13:39:43 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/04 17:15:58 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 
 #include <inttypes.h>
 
-constexpr float operator""_hz(long double v)  { return (float)v; }
-constexpr float operator""_khz(long double v) { return (float)(v * 1000.0); }
-constexpr float operator""_ms(long double v)  { return (float)v; }
-constexpr float operator""_s(long double v)   { return (float)(v * 1000.0); }
+inline extern constexpr float operator""_hz(long double v)  { return (float)v; }
+inline extern constexpr float operator""_khz(long double v) { return (float)(v * 1000.0); }
+inline extern constexpr float operator""_ms(long double v)  { return (float)v; }
+inline extern constexpr float operator""_s(long double v)   { return (float)(v * 1000.0); }
 
-constexpr uint16_t BUFFER_FRAMES    = 128;
-constexpr uint16_t SAMPLE_RATE      = 44100;
-constexpr float    DEADLINE_US      = static_cast<float>(BUFFER_FRAMES) / static_cast<float>(SAMPLE_RATE) * 1000000;
+inline extern constexpr uint16_t BUFFER_FRAMES    = 128;
+inline extern constexpr uint16_t SAMPLE_RATE      = 44100;
+inline extern constexpr float    DEADLING_US          = static_cast<float>(BUFFER_FRAMES) / static_cast<float>(SAMPLE_RATE) * 1000000;
+inline extern constexpr float    DEADLING_MS          = static_cast<float>(BUFFER_FRAMES) / static_cast<float>(SAMPLE_RATE) * 1000;
+
+enum e_modules {
+    OSC,
+    VCA
+};

@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 22:42:44 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/03 15:28:37 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/04 16:09:10 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,4 @@ float Osc::square() {
 
 float Osc::saw() { 
     return phase * 2.0f - 1.0f; // to fix
-}
-
-float Osc::sine() {
-    return sinf(this->phase);
 }

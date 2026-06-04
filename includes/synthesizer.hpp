@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 23:03:38 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/03 14:37:24 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/04 16:42:47 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,6 @@
 #include "Osc.hpp"
 #include "Synth.hpp"
 #include "VCA.hpp"
+#include "Modulator.hpp"
+#include "Enveloppe.hpp"
 

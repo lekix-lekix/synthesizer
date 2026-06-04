@@ -8,6 +8,28 @@
 using us = std::chrono::nanoseconds;
 using Time = std::chrono::steady_clock;
 
+// AUDIO TESTS
+// auto stop1 = Time::now();
+// auto stop2 = Time::now();
+// std::cout << "read time = " << std::chrono::duration_cast<us>(stop2 - stop1).count() << std::endl;
+// assert(!std::isnan(frame));
+// assert(!std::isinf(frame));
+// assert(std::abs(frame) <= 1.0f); // clipping check
+
+// Détecter les sauts brutaux
+// if (i > 2) {
+//     float delta = std::abs(frame - prev);
+//     assert(delta < 0.5f); // seuil à ajuster
+// }
+// std::cout << "frame = " << frame << std::endl;
+// prev = frame;
+// auto end = Time::now();
+// auto time_elapsed = std::chrono::duration_cast<us>(end - start).count();
+// std::cout << "time_elapsed = " << time_elapsed << std::endl;
+// (void) time_elapsed;
+// std::cout << "AudioCallback : " << time_elapsed << std::endl;
+// assert(time_elapsed < DEADLINE_US);
+
 int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
                   double streamTime, RtAudioStreamStatus status, void *userData)
 {
@@ -18,33 +40,11 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
     // auto start = Time::now();
     double *outBuffer = (double *)outputBuffer;
     Synth *self = static_cast<Synth *>(userData);
-
-    for (unsigned int i = 0; i < nBufferFrames; i++)
-    {
-        float frame = self->render();
-        // auto stop1 = Time::now();
-        // audioBuff.read(frame);
-        // auto stop2 = Time::now();
-        // std::cout << "read time = " << std::chrono::duration_cast<us>(stop2 - stop1).count() << std::endl;
-        // assert(!std::isnan(frame));
-        // assert(!std::isinf(frame));
-        // assert(std::abs(frame) <= 1.0f); // clipping check
-
-        // Détecter les sauts brutaux
-        // if (i > 2) {
-        //     float delta = std::abs(frame - prev);
-        //     assert(delta < 0.5f); // seuil à ajuster
-        // }
-        *outBuffer++ = frame;
-        // std::cout << "frame = " << frame << std::endl;
-        // prev = frame;
+    for (unsigned int i = 0; i < nBufferFrames; i++) {
+        self->incTotalSamples();
+        *outBuffer++ = self->render();
     }
-    // auto end = Time::now();
-    // auto time_elapsed = std::chrono::duration_cast<us>(end - start).count();
-    // std::cout << "time_elapsed = " << time_elapsed << std::endl;
-    // (void) time_elapsed;
-    // std::cout << "AudioCallback : " << time_elapsed << std::endl;
-    // assert(time_elapsed < DEADLINE_US);
+
     return (0);
 }
 
@@ -66,13 +66,16 @@ int main()
 
     Synth synth;
 
-    synth.addAudioModule(std::make_unique<Osc>(261.626f));
-    synth.addAudioModule(std::make_unique<Osc>(311.127f));
-    synth.addAudioModule(std::make_unique<VCA>(0.4f));
+    synth.addAudioModule(OSC);
+    synth.addAudioModule(OSC);
+    synth.addAudioModule(OSC);
+    synth.addAudioModule(VCA);
 
-    // synth.getOsc(0)->setFreq(261.626f);
+    synth.getModule<Osc>(1)->setFreq(261.626f);
+    synth.getModule<Osc>(2)->setFreq(311.127f);
+
+
     // synth.getOsc(1)->setFreq(311.127f); // C minor
-
 
     // synth.getOsc(0)->setWave(SAW);
     // synth.getOsc(1)->setWave(SAW);
