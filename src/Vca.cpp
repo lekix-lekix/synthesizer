@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   synthesizer.hpp                                    :+:      :+:    :+:   */
+/*   Vca.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/21 23:03:38 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 16:42:47 by lekix            ###   ########.fr       */
+/*   Created: 2026/06/05 11:24:57 by lekix             #+#    #+#             */
+/*   Updated: 2026/06/05 17:12:27 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "Vca.hpp"
 
-#include <iostream>
+float Vca::render() {
+    // float mod = 0;
 
-#include "constants.hpp"
-#include "AudioModule.hpp"
-#include "Osc.hpp"
-#include "Synth.hpp"
-#include "VCA.hpp"
-#include "Modulator.hpp"
-#include "Enveloppe.hpp"
-
+    this->audioOutput_ = this->audioInput_ * this->gain_;
+    return this->audioInput_;
+}

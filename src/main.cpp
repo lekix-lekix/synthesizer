@@ -1,9 +1,9 @@
 #include "../rtaudio/RtAudio.h"
-#include "../includes/synthesizer.hpp"
 #include <iostream>
 #include <chrono>
 #include <cassert>
 #include <unistd.h>
+#include "Synth.hpp"
 
 using us = std::chrono::nanoseconds;
 using Time = std::chrono::steady_clock;
@@ -40,9 +40,11 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
     // auto start = Time::now();
     double *outBuffer = (double *)outputBuffer;
     Synth *self = static_cast<Synth *>(userData);
+    std::weak_ptr<Mixer_4> mixer = self->getMaster();
     for (unsigned int i = 0; i < nBufferFrames; i++) {
         self->incTotalSamples();
-        *outBuffer++ = self->render();
+        *outBuffer++ = mixer.lock()->render();
+        std::cout << *(outBuffer - 1) << std::endl;
     }
 
     return (0);
@@ -51,8 +53,6 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
 int main()
 {
     RtAudio audio;
-
-    std::cout << "deadline = " << DEADLINE_US << std::endl;
 
     auto ids = audio.getDeviceIds();
     std::cout << "Devices: " << ids.size() << std::endl;
@@ -67,12 +67,10 @@ int main()
     Synth synth;
 
     synth.addAudioModule(OSC);
-    synth.addAudioModule(OSC);
-    synth.addAudioModule(OSC);
-    synth.addAudioModule(VCA);
+    synth.addAudioModule(MIXER_4);
 
-    synth.getModule<Osc>(1)->setFreq(261.626f);
-    synth.getModule<Osc>(2)->setFreq(311.127f);
+    // synth.getModule<Osc>(1)->setFreq(261.626f);
+    // synth.getModule<Osc>(2)->setFreq(311.127f);
 
 
     // synth.getOsc(1)->setFreq(311.127f); // C minor

@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Enveloppe.hpp                                      :+:      :+:    :+:   */
+/*   Envelope.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 16:28:19 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 16:49:51 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 11:48:23 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "synthesizer.hpp"
-
 #pragma once
 
-class Enveloppe : public Modulator
+#include <inttypes.h>
+
+#include "Modulator.hpp"
+
+class Envelope : public Modulator
 {
     private:
-        /* data */
+        float   currentParamValue_;
+        int     startFrame_;
+        
     public:
-        Enveloppe() = delete;
-        ~Enveloppe() = default;
-        Enveloppe(const Enveloppe &other) = default;
-        Enveloppe(Enveloppe &&other) = default;
-        Enveloppe &operator=(const Enveloppe &other) = default;
-        Enveloppe &operator=(Enveloppe &&other) = default;
+        Envelope() = delete;
+        ~Envelope() = default;
+        Envelope(const Envelope &other) = default;
+        Envelope(Envelope &&other) = default;
+        Envelope &operator=(const Envelope &other) = default;
+        Envelope &operator=(Envelope &&other) = default;
 
-        Enveloppe(const uint64_t &totalSamplesElapsed) : Modulator(totalSamplesElapsed) {};
+        Envelope(const uint64_t &totalSamplesElapsed) : Modulator(totalSamplesElapsed) {};
 
-        float render(float signal = 0);
-        float linear(float signal);
+        float render();
+        float linear(float time_ms);
 };

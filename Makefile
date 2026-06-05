@@ -6,7 +6,7 @@
 #    By: lekix <lekix@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 16:29:27 by kipouliq          #+#    #+#              #
-#    Updated: 2026/06/03 15:30:47 by lekix            ###   ########.fr        #
+#    Updated: 2026/06/05 17:12:45 by lekix            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,12 @@ CXX = c++ -D__LINUX_ALSA__
 FLAGS = -Wall -Wextra -Werror -g3 -O3
 LIBFLAGS = -lpthread -lasound
 SRCS = rtaudio/RtAudio.cpp \
-        src/Synth.cpp \
+        src/AudioModule.cpp \
+		src/Envelope.cpp \
         src/Osc.cpp \
+		src/Synth.cpp \
+		src/Vca.cpp \
+		src/Mixer_4.cpp \
         src/main.cpp
 
 OBJS_DIR = .objs
@@ -29,7 +33,7 @@ $(OBJS_DIR):
 
 $(OBJS_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CXX) $(FLAGS) -c $< -o $@
+	$(CXX) $(FLAGS) -c $< -o $@ -Iincludes
 
 $(NAME): $(OBJS)
 	$(CXX) $(FLAGS) $(OBJS) -o $@ $(LIBFLAGS)

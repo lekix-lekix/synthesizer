@@ -6,17 +6,18 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 16:13:49 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 16:48:54 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 15:15:51 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "synthesizer.hpp"
+#include <inttypes.h>
 
 class Modulator
 {
     private:
+    
     public:
         Modulator() = default;
         virtual ~Modulator() = default;
@@ -25,8 +26,9 @@ class Modulator
         Modulator &operator=(const Modulator &other) = default;
         Modulator &operator=(Modulator &&other) = default;
 
-        Modulator(const uint64_t &totalSamplesElapsed) : totalSamplesElapsed(totalSamplesElapsed) {};
-        const uint64_t &totalSamplesElapsed;
+        const uint64_t &totalSamplesElapsed_;
         
-        virtual float render(float signal = 0);
+        Modulator(const uint64_t &totalSamplesElapsed) : totalSamplesElapsed_(totalSamplesElapsed) {};
+        
+        virtual float render() = 0;
 };

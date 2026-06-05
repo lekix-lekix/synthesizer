@@ -6,29 +6,38 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 23:02:05 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 16:02:37 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 17:31:10 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "synthesizer.hpp"
+#include <vector>
 #include <array>
-#include <memory>
-#include <unordered_map>
 #include <optional>
+#include <inttypes.h>
+#include <memory>
+
+#include "AudioModule.hpp"
+#include "Modulator.hpp"
+#include "Osc.hpp"
+#include "Vca.hpp"
+#include "Envelope.hpp"
+#include "Mixer_4.hpp"
+#include "constants.hpp"
 
 // template <typename T>
 class Synth
 {
     private:
-        std::vector<std::unique_ptr<AudioModule>>   audioModules_;
-        // std::array<float, BUFFER_FRAMES>            buffer_;
+        std::vector<std::shared_ptr<AudioModule>>   audioModules_;
+        std::vector<std::shared_ptr<Modulator>>     modulators_;
         
-        std::unique_ptr<AudioModule>                makeAudioModule(e_modules type);
+        std::shared_ptr<Modulator>                  makeModulator(e_modulators type);
+        std::shared_ptr<AudioModule>                makeAudioModule(e_audioModules type);
         uint64_t                                    totalSamplesElapsed = {0};
         
-        public:
+    public:
         Synth() = default;
         ~Synth() = default;
         Synth(const Synth &other) = default;
@@ -36,16 +45,22 @@ class Synth
         Synth &operator=(const Synth &other) = default;
         Synth &operator=(Synth &&other) = default;
         
-        
-        void                                        addAudioModule(e_modules type);
+        void                                        addAudioModule(e_audioModules type);
         void                                        incTotalSamples() { totalSamplesElapsed++; };   
         float                                       render();
 
         template<typename T>
-        T*                                          getModule(int idx);
-        std::vector<std::unique_ptr<AudioModule>>   &getModules() { return this->audioModules_; };
+        T*                                          getModule(int idx); // -> a changer
+        std::vector<std::shared_ptr<AudioModule>>   &getModules() { return this->audioModules_; };
         const uint64_t                              &getTotalSamples() { return this->totalSamplesElapsed; };
         void                                        setInput(int input);
+
+        std::weak_ptr<Mixer_4> getMaster() {
+            if (audioModules_.empty())
+                return {};
+
+            return std::dynamic_pointer_cast<Mixer_4>(audioModules_.back());
+        }
 
         // std::array<float, BUFFER_FRAMES> &getBuffer() { return this->buffer_; };
 };

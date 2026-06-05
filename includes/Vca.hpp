@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   VCA.hpp                                            :+:      :+:    :+:   */
+/*   Vca.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 16:48:42 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 15:05:51 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 15:12:53 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "synthesizer.hpp"
+#include "AudioModule.hpp"
 
 class Vca : public AudioModule {
     private:
-        float   ampValue = {0.2};
+        float   gain_ = {0.2};
 
     public:
         Vca() = default;
@@ -28,6 +28,6 @@ class Vca : public AudioModule {
 
         Vca(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {};
 
-        void    setAmpValue(float newVal) { this->ampValue = newVal; };
-        float   render(float signal = 0.f) override { return signal * this->ampValue; } ;
+        void    setGain(float newVal) { this->gain_ = newVal; };
+        float   render() override;
 };

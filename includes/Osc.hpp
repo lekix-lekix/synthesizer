@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 16:41:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 16:42:18 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 15:10:35 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include <vector>
 #include <array>
 #include <cmath>
-#include "synthesizer.hpp"
+
+#include "AudioModule.hpp"
 
 enum e_wave {
     SINE,
@@ -24,9 +25,9 @@ enum e_wave {
     // TRIANGLE
 };
 
-class Osc : public AudioModule {         // to do : Osc (interface) -> SineOsc, SquareOsc, ..
+class Osc : public AudioModule {
     private:
-        e_wave    waveType = { SINE };
+        e_wave  waveType = { SINE };
         float   freq = { 440.0f };
         float   phase = { 0 };
         
@@ -44,7 +45,7 @@ class Osc : public AudioModule {         // to do : Osc (interface) -> SineOsc, 
         float   sine();
         float   square();
         float   saw();
-        float   render(float signal = 0.f) override;
+        float   render() override;
 
         void    setFreq(float newFreq) { this->freq = newFreq; };
         void    setWave(e_wave newWaveType) { this->waveType = newWaveType; }; 

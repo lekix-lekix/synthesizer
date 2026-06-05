@@ -6,22 +6,18 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:36:33 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 15:40:31 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 17:16:29 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Synth.hpp"
 #include "../includes/constants.hpp"
-#include "../includes/synthesizer.hpp"
 
-std::unique_ptr<AudioModule> Synth::makeAudioModule(e_modules type) {
+std::shared_ptr<Modulator> Synth::makeModulator(e_modulators type) {
     switch (type)
     {
-        case OSC:
-            return std::move(std::make_unique<Osc>(this->totalSamplesElapsed));
-            break;
-        
-        case VCA:
-            return std::move(std::make_unique<Vca>(this->totalSamplesElapsed));
+        case ENV:
+            return std::make_shared<Envelope>(this->totalSamplesElapsed);
             break;
         
         default:
@@ -30,8 +26,27 @@ std::unique_ptr<AudioModule> Synth::makeAudioModule(e_modules type) {
     return nullptr;
 }
 
-void Synth::addAudioModule(e_modules type) {
-    std::unique_ptr<AudioModule> module = this->makeAudioModule(type);
+std::shared_ptr<AudioModule> Synth::makeAudioModule(e_audioModules type) {
+    switch (type)
+    {
+        case OSC:
+            return std::make_shared<Osc>(this->totalSamplesElapsed);
+            break;
+        
+        case VCA:
+            return std::make_shared<Vca>(this->totalSamplesElapsed);
+            break;
+        
+        case MIXER_4:
+            return std::make_shared<Mixer_4>(this->totalSamplesElapsed);
+        default:
+            break;
+    }
+    return nullptr;
+}
+
+void Synth::addAudioModule(e_audioModules type) {
+    std::shared_ptr<AudioModule> module = this->makeAudioModule(type);
     if (module == nullptr)
         return ;
     this->audioModules_.push_back(this->makeAudioModule(type));
@@ -44,7 +59,7 @@ float Synth::render()
 
     float signal = 0;
     for (auto &module : this->audioModules_) {
-        signal = module->render(signal);
+        signal = module->render();
     }
     return signal;
 }

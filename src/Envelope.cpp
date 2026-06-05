@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Enveloppe.cpp                                      :+:      :+:    :+:   */
+/*   Envelope.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 16:49:59 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/04 17:16:42 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/05 15:15:24 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Enveloppe.hpp"
+#include "Envelope.hpp"
+#include "constants.hpp"
 
-float Enveloppe::render(float signal) {
-    
+float Envelope::render() {
+    return 0;
 }
 
 // v[n+1] = v[n] + (b2 ​− b1​​) / N -> linear enveloppe
@@ -25,12 +26,21 @@ float Enveloppe::render(float signal) {
 // b2               Valeur d'arrivée (end value).
 // N	            Nombre de pas (ou durée de la transition en échantillons).
 // (b2 - b1)	    Amplitude totale du changement à effectuer.
-// (b2 - b1) / N    Incrément ajouté à chaque échantillon. On l'appelle parfois step size ou slope.
+// (b2 - b1) / N    Incrément ajouté à chaque échantillon -> step size / slope.
 
 // N = Fs * t où :
 // Fs = fréquence d'échantillonnage (samples/s)
 // t = durée souhaitée (s)
 
-float Enveloppe::linear(float signal) {
+// only INC will change depending on linear, exp, log
+
+float Envelope::linear(float time_ms) {
+    if (this->startFrame_ == 0)
+        this->startFrame_ = this->totalSamplesElapsed_;
     
+    int totalSteps = time_ms * SAMPLE_RATE_1MS; // --> N
+    int actualStep = this->totalSamplesElapsed_ - this->startFrame_;
+    if (actualStep >= totalSteps)
+        return 0; // -> stop enveloppe instead
+    return static_cast<float>(actualStep) / static_cast<float>(totalSteps);
 }
