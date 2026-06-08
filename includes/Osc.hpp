@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 16:41:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 15:10:35 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 14:38:09 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,12 @@ class Osc : public AudioModule {
         Osc &operator=(const Osc &other) = default;
         Osc &operator=(Osc &&other) = default;
 
-        Osc(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {};
-        Osc(const float &freq, const uint64_t totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->freq = freq; };
-
+        Osc(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->name_ = "Osc"; };
+        Osc(const uint64_t totalSamplesElapsed, const float &freq) : AudioModule(totalSamplesElapsed) {
+            this->name_ = "Osc";
+            this->freq = freq;
+        }
+        
         float   sine();
         float   square();
         float   saw();

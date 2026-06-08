@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 23:02:05 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 17:31:10 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 17:11:31 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class Synth
         Synth &operator=(Synth &&other) = default;
         
         void                                        addAudioModule(e_audioModules type);
+        void                                        addModulator(e_modulators type, std::shared_ptr<AudioModule> dest);
         void                                        incTotalSamples() { totalSamplesElapsed++; };   
         float                                       render();
 
@@ -58,7 +59,6 @@ class Synth
         std::weak_ptr<Mixer_4> getMaster() {
             if (audioModules_.empty())
                 return {};
-
             return std::dynamic_pointer_cast<Mixer_4>(audioModules_.back());
         }
 

@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 16:22:00 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 17:37:08 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 14:25:02 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class Mixer_4 : public AudioModule
         Mixer_4 &operator=(Mixer_4 const &other) = default;
         Mixer_4 &operator=(Mixer_4 &&other) = default;
 
-    Mixer_4(const uint64_t& totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {}
+        Mixer_4(const uint64_t& totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {}
 
         float render();
 };

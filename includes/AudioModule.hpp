@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 17:08:05 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 16:39:32 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 16:53:26 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "Modulator.hpp"
 
 class AudioModule {
     protected:
+        std::string                                 name_;
         float                                       audioInput_;
         float                                       audioOutput_;
 
@@ -40,9 +42,11 @@ class AudioModule {
         void addModulator(std::shared_ptr<Modulator> modulator);
         void addInput(std::shared_ptr<AudioModule> other);
         void addOutput(std::shared_ptr<AudioModule> other);
+        void audioConnect(std::shared_ptr<AudioModule> from, std::shared_ptr<AudioModule> to);
 
         virtual float &getInput() { return this->audioInput_; };
         virtual float &getOutput() { return this->audioOutput_; };
+        std::string const &getName() { return this->name_; };
 
         virtual float render() = 0;
 };

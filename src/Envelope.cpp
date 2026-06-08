@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 16:49:59 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 15:15:24 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 16:51:51 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ float Envelope::linear(float time_ms) {
     int totalSteps = time_ms * SAMPLE_RATE_1MS; // --> N
     int actualStep = this->totalSamplesElapsed_ - this->startFrame_;
     if (actualStep >= totalSteps)
-        return 0; // -> stop enveloppe instead
+        this->startFrame_ = 0; // -> stop enveloppe instead
     return static_cast<float>(actualStep) / static_cast<float>(totalSteps);
 }

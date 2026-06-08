@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:36:33 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 17:16:29 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 17:11:39 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,17 @@ std::shared_ptr<AudioModule> Synth::makeAudioModule(e_audioModules type) {
 }
 
 void Synth::addAudioModule(e_audioModules type) {
-    std::shared_ptr<AudioModule> module = this->makeAudioModule(type);
-    if (module == nullptr)
+    std::shared_ptr<AudioModule> newModule = this->makeAudioModule(type);
+    if (newModule == nullptr)
         return ;
-    this->audioModules_.push_back(this->makeAudioModule(type));
+    this->audioModules_.push_back(newModule);
+}
+
+void Synth::addModulator(e_modulators type, std::shared_ptr<AudioModule> dest) {
+    std::shared_ptr<Modulator> newModulator = this->makeModulator(type);
+    if (newModulator == nullptr)
+        return ;
+    dest->addModulator(newModulator);
 }
 
 float Synth::render()

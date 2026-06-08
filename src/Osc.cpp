@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 22:42:44 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 17:12:05 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 16:25:15 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,34 @@
 
 #include "Osc.hpp"
 #include "constants.hpp"
+#include <iostream>
 
 constexpr float PI      = 3.14159;
 constexpr float TWO_PI  = 2.0f * PI;
 
 float Osc::render() {
+    // std::cout << "OSC CALLED\n";
     this->phase += TWO_PI * this->freq / SAMPLE_RATE;
     if (this->phase >= TWO_PI) this->phase -= TWO_PI;
     
-    float output = 0;
+    float signal = 0;
     switch (this->waveType) {
         case SINE:
-            return sinf(this->phase);
+            signal = sinf(this->phase);
             break;
 
         case SQUARE:
-            return this->square();
+            signal = this->square();
             break;
         
         case SAW:
-            return this->saw();
+            signal = this->saw();
             break;
             
         default:
             return -1;
     }
-    for (auto &out : this->outputs_) {
-        out.lock()->getInput() = output;
-    }
+    this->audioOutput_ = signal;
     return 0;
 }
 

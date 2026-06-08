@@ -43,10 +43,11 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
     std::weak_ptr<Mixer_4> mixer = self->getMaster();
     for (unsigned int i = 0; i < nBufferFrames; i++) {
         self->incTotalSamples();
-        *outBuffer++ = mixer.lock()->render();
-        std::cout << *(outBuffer - 1) << std::endl;
+        self->render();
+        *outBuffer++ = mixer.lock()->getOutput();
+        // std::cout << "=======\n";
+        // std::cout << *(outBuffer - 1) << std::endl;
     }
-
     return (0);
 }
 
@@ -67,7 +68,19 @@ int main()
     Synth synth;
 
     synth.addAudioModule(OSC);
+    synth.addAudioModule(VCA);
     synth.addAudioModule(MIXER_4);
+
+    std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getModules();
+    // for (unsigned int i = 0; i < modules.size(); i++) {
+        // if (i != modules.size() - 1)
+            // modules[i]->connect(modules[i], modules[i + 1]);
+    // }
+
+    synth.addModulator(ENV, modules[1]);
+
+    modules[0]->audioConnect(modules[0], modules[1]);
+    modules[1]->audioConnect(modules[1], modules[2]);
 
     // synth.getModule<Osc>(1)->setFreq(261.626f);
     // synth.getModule<Osc>(2)->setFreq(311.127f);

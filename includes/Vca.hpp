@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 16:48:42 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/05 15:12:53 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/08 16:04:51 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 class Vca : public AudioModule {
     private:
-        float   gain_ = {0.2};
+        float   gain_ = {1};
 
     public:
         Vca() = default;
@@ -26,7 +26,7 @@ class Vca : public AudioModule {
         Vca &operator=(const Vca &other) = default;
         Vca &operator=(Vca &&other) = default;
 
-        Vca(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {};
+        Vca(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->name_ = "Vca"; };
 
         void    setGain(float newVal) { this->gain_ = newVal; };
         float   render() override;
