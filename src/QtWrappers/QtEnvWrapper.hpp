@@ -9,10 +9,10 @@ class QtEnvWrapper : public QObject
     Q_OBJECT
 
 private:
-    Envelope *env;
+    Envelope *env_;
 
 public:
-    explicit QtEnvWrapper(QObject *parent = nullptr);
+    explicit QtEnvWrapper(Envelope *env, QObject *parent = nullptr);
 
 signals:
 };

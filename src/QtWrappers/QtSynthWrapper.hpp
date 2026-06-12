@@ -6,8 +6,11 @@
 #include <QEvent>
 #include <QKeyEvent>
 
+#include <memory>
+
 #include "Synth.hpp"
 #include "QtEnvWrapper.hpp"
+#include "QtOscWrapper.hpp"
 
 class QtSynthWrapper : public QObject {
     Q_OBJECT

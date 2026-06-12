@@ -27,7 +27,7 @@ void Osc::render() {
     if (this->phase >= TWO_PI) this->phase -= TWO_PI;
     
     float signal = 0;
-    switch (this->waveType) {
+    switch (this->waveType_) {
         case SINE:
             signal = sinf(this->phase);
             break;
@@ -36,9 +36,9 @@ void Osc::render() {
             signal = this->square();
             break;
         
-        case SAW:
-            signal = this->saw();
-            break;
+        // case SAW:
+        //     signal = this->saw();
+        //     break;
             
         default:
             return ;

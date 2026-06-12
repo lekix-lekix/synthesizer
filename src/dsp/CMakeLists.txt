@@ -8,6 +8,16 @@ add_library(dsp STATIC
     Modulators/Envelope/Envelope.cpp
 )
 
+target_sources(dsp PRIVATE
+    constants.hpp
+    AudioModules/AudioModule.hpp
+    AudioModules/Osc/Osc.hpp
+    AudioModules/Vca/Vca.hpp
+    Modulators/Modulator.hpp
+    Modulators/Envelope/Envelope.hpp
+    Synth.hpp
+)
+
 target_include_directories(dsp PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/AudioModules

@@ -21,23 +21,23 @@
 enum e_wave {
     SINE,
     SQUARE,
-    SAW,
+    // SAW,
     // TRIANGLE
 };
 
 class Osc : public AudioModule {
     private:
-        e_wave  waveType = { SINE };
+        e_wave  waveType_ = { SINE };
         float   freq = { 440.0f };
         float   phase = { 0 };
         
     public:
-        Osc() = default;
+        Osc() = delete;
         ~Osc() = default;
         Osc(const Osc &other) = default;
         Osc(Osc &&other) = default;
-        Osc &operator=(const Osc &other) = default;
-        Osc &operator=(Osc &&other) = default;
+        Osc &operator=(const Osc &other) = delete;
+        Osc &operator=(Osc &&other) = delete;
 
         Osc(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->name_ = "Osc"; };
         Osc(const uint64_t totalSamplesElapsed, const float &freq) : AudioModule(totalSamplesElapsed) {
@@ -50,8 +50,20 @@ class Osc : public AudioModule {
         float   saw();
         void    render() override;
 
-        void    setFreq(float newFreq) { this->freq = newFreq; };
-        void    setWave(e_wave newWaveType) { this->waveType = newWaveType; }; 
-        void    incFreq() { this->freq++; };
-        void    decFreq() { this->freq--; };
+        float       getFreq() { return this->freq; };
+        Osc         &setFreq(float newFreq) { this->freq = newFreq; return *this; };
+
+        Osc         &setWave(e_wave newWaveType) { this->waveType_ = newWaveType; return *this; };
+        e_wave      &getWave() { return this->waveType_; };
+
+        void        incFreq() { this->freq++; };
+        void        decFreq() { this->freq--; };
+
+        Osc     &toggleWave() {
+            if (waveType_ == SINE)
+                waveType_ = SQUARE;
+            else
+                waveType_ = SINE;
+            return *this;
+        };
 };

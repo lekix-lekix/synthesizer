@@ -3,6 +3,8 @@
 #include "Synth.hpp"
 #include "../rtaudio/RtAudio.h"
 #include "QtSynthWrapper.hpp"
+#include "QtOscWrapper.hpp"
+#include <QQmlContext>
 #include "constants.hpp"
 
 int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
@@ -44,7 +46,7 @@ int main(int argc, char *argv[])
     QtSynthWrapper synthWrapper(synth);
     app.installEventFilter(&synthWrapper);
 
-    synth.addAudioModule(OSC);
+    std::shared_ptr<AudioModule> osc = synth.addAudioModule(OSC);
     synth.addAudioModule(VCA);
     synth.addAudioModule(MIXER_4);
 
@@ -86,6 +88,9 @@ int main(int argc, char *argv[])
                   << audio.getErrorText() << '\n'
                   << std::endl;
     }
+
+    QtOscWrapper oscWrapper(dynamic_cast<Osc *>(osc.get()));
+    engine.rootContext()->setContextProperty("osc", &oscWrapper);
 
     if (audio.startStream())
     {

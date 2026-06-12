@@ -1,7 +1,14 @@
 add_library(wrappers STATIC
     QtSynthWrapper.cpp
     QtEnvWrapper.cpp
+    QtOscWrapper.cpp
     # QtOscWrapper.cpp
+)
+
+target_sources(wrappers PRIVATE
+    QtEnvWrapper.hpp
+    QtSynthWrapper.hpp
+    QtOscWrapper.hpp
 )
 
 target_include_directories(wrappers PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -18,10 +18,9 @@ QtSynthWrapper &QtSynthWrapper::setGate(bool state) {
     return *this;
 }
 
-bool QtSynthWrapper::eventFilter(QObject *obj, QEvent *event) // to move into a keyboard module
-{
+bool QtSynthWrapper::eventFilter(QObject *obj, QEvent *event) { // to move into a keyboard module
     if (event->type() == QEvent::KeyPress) {
-        std::cout << "keypress detected\n";
+        // std::cout << "keypress detected\n";
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
         if (keyEvent->isAutoRepeat()) // ignorer la répétition clavier
@@ -51,21 +50,32 @@ void QtSynthWrapper::onModulatorCreated(Modulator *newModule, e_modulators type)
     QObject *moduleWrapper;
 
     switch (type) {
-        case ENV:
-            moduleWrapper = new QtEnvWrapper(this);
-            break;
+    case ENV: {
+        Envelope *newEnv = dynamic_cast<Envelope*>(newModule);
+        if (!newEnv)
+            return ;
+        qtModulators_.append(QVariant::fromValue(new QtEnvWrapper(newEnv, this)));
+        break;
+    }
         default:
             break;
     }
-    std::cout << "Module created" << std::endl;
-    qtModulators_.append(QVariant::fromValue(moduleWrapper));
+    std::cout << "Modulator created" << std::endl;
 }
 
 void QtSynthWrapper::onAudioModuleCreated(AudioModule *newModule, e_audioModules type) {
-    // QObject *moduleWrapper;
+    QObject *moduleWrapper;
 
-    // switch (type) {
-    //     case OSC:
-    //         moduleWrapper
-    // }
+    switch (type) {
+    case OSC: {
+        Osc *newOsc = dynamic_cast<Osc*>(newModule);
+        if (!newOsc)
+            return ;
+        qtAudioModules_.append(QVariant::fromValue(new QtOscWrapper(newOsc, this)));
+        break;
+    }
+    default:
+        break;
+    }
+    std::cout << "Audio Module created" << std::endl;
 }

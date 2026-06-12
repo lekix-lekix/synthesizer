@@ -1,5 +1,5 @@
 #include "QtEnvWrapper.hpp"
 
-QtEnvWrapper::QtEnvWrapper(QObject *parent)
-    : QObject{parent}
+QtEnvWrapper::QtEnvWrapper(Envelope *env, QObject *parent)
+    : env_(env), QObject{parent}
 {}
