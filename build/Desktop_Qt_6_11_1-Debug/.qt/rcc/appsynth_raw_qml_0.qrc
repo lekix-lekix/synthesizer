@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/synth/">
-    <file alias="src/ui/Main.qml">/home/lekix/Desktop/DEV/synthesizer/src/ui/Main.qml</file>
-  </qresource>
-</RCC>
-

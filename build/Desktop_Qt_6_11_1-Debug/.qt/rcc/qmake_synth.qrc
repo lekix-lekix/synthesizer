@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/synth">
-    <file alias="qmldir">/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/synth/qmldir</file>
-  </qresource>
-</RCC>
-
