@@ -1,0 +1,16 @@
+-I
+/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug
+-I
+/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/synth
+-I
+/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug
+-I
+/opt/Qt/6.11.1/gcc_64/qml
+--resource
+/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/.qt/rcc/qmake_synth.qrc
+--resource
+/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/.qt/rcc/appsynth_raw_qml_0.qrc
+--resource
+/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/.qt/rcc/appsynth_raw_qml_0_extra_qmldirs.qrc
+--module
+synth

@@ -1,0 +1,6 @@
+module synth
+typeinfo appsynth.qmltypes
+prefer :/qt/qml/synth/
+Main 254.0 src/ui/Main.qml
+depends QtQuick
+

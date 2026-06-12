@@ -1,0 +1,6 @@
+set(__QT_DEPLOY_TARGET_dsp_FILE /home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/libdsp.a)
+set(__QT_DEPLOY_TARGET_dsp_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_wrappers_FILE /home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/QtWrappers/libwrappers.a)
+set(__QT_DEPLOY_TARGET_wrappers_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_appsynth_FILE /home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/appsynth)
+set(__QT_DEPLOY_TARGET_appsynth_TYPE EXECUTABLE)

@@ -1,0 +1,312 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f2e65295874ecb192235.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						19,
+						20,
+						21
+					]
+				},
+				{
+					"build" : "src/dsp",
+					"jsonFile" : "directory-src.dsp-Debug-30846c9193c6dfff2273.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/dsp",
+					"targetIndexes" : 
+					[
+						16,
+						17,
+						18
+					]
+				},
+				{
+					"build" : "src/QtWrappers",
+					"jsonFile" : "directory-src.QtWrappers-Debug-7659c40abe91e8797617.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/QtWrappers",
+					"targetIndexes" : 
+					[
+						22,
+						23,
+						24
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "synth",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "all_aotstats::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_aotstats-Debug-507245b34a52700317d0.json",
+					"name" : "all_aotstats",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint-Debug-0eff2fb8c6a5e5a5d509.json",
+					"name" : "all_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_json-Debug-653e924e1044657a9529.json",
+					"name" : "all_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_module-Debug-240a0f9e505ce1c3a56c.json",
+					"name" : "all_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmltyperegistrations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmltyperegistrations-Debug-45f01a65a017f27c7ff2.json",
+					"name" : "all_qmltyperegistrations",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth-Debug-90bfd18c27a73f138858.json",
+					"name" : "appsynth",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_autogen-Debug-f1c4138819006ae06c43.json",
+					"name" : "appsynth_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_autogen_timestamp_deps-Debug-0447e39d05203d6da15a.json",
+					"name" : "appsynth_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_copy_qml::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_copy_qml-Debug-f6ecc188df39b8f12b7c.json",
+					"name" : "appsynth_copy_qml",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_copy_res::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_copy_res-Debug-ed15230ac2da4ae9a572.json",
+					"name" : "appsynth_copy_res",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_qmlimportscan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_qmlimportscan-Debug-b84f3ce9e7cbff67bebb.json",
+					"name" : "appsynth_qmlimportscan",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_qmllint-Debug-e7a974c5a52f4a606c29.json",
+					"name" : "appsynth_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_qmllint_json-Debug-356740549297b8d0a240.json",
+					"name" : "appsynth_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_qmllint_module-Debug-b3cfd3ced5b1e9a430ca.json",
+					"name" : "appsynth_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appsynth_qmltyperegistration::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appsynth_qmltyperegistration-Debug-336089fc6347bb1d05b4.json",
+					"name" : "appsynth_qmltyperegistration",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "clean_qml_context_properties::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-clean_qml_context_properties-Debug-b4d6fd29fb939a2e737c.json",
+					"name" : "clean_qml_context_properties",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dsp::@241c57e6397e4cd38168",
+					"jsonFile" : "target-dsp-Debug-5c866f5b8db992df43f0.json",
+					"name" : "dsp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dsp_autogen::@241c57e6397e4cd38168",
+					"jsonFile" : "target-dsp_autogen-Debug-ebf52707d57236eab33f.json",
+					"name" : "dsp_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dsp_autogen_timestamp_deps::@241c57e6397e4cd38168",
+					"jsonFile" : "target-dsp_autogen_timestamp_deps-Debug-744b257c807c87ab520a.json",
+					"name" : "dsp_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "dump_qml_context_properties::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dump_qml_context_properties-Debug-eaa5b5aa7b6f6844496f.json",
+					"name" : "dump_qml_context_properties",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "generate_qmlls_build_ini_file::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-generate_qmlls_build_ini_file-Debug-a7cca27a72592f213a73.json",
+					"name" : "generate_qmlls_build_ini_file",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "module_appsynth_aotstats_target::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-module_appsynth_aotstats_target-Debug-7947034be2509ba97860.json",
+					"name" : "module_appsynth_aotstats_target",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "wrappers::@19f457f0f863cb74d5ac",
+					"jsonFile" : "target-wrappers-Debug-2e797d7c89120d71505d.json",
+					"name" : "wrappers",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "wrappers_autogen::@19f457f0f863cb74d5ac",
+					"jsonFile" : "target-wrappers_autogen-Debug-364e53848043fca85ccb.json",
+					"name" : "wrappers_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "wrappers_autogen_timestamp_deps::@19f457f0f863cb74d5ac",
+					"jsonFile" : "target-wrappers_autogen_timestamp_deps-Debug-5a05d8be4c3bf05ce50d.json",
+					"name" : "wrappers_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug",
+		"source" : "/home/lekix/Desktop/DEV/synthesizer"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

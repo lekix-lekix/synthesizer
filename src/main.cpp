@@ -4,6 +4,8 @@
 #include <cassert>
 #include <unistd.h>
 #include "Synth.hpp"
+#include <termios.h>
+#include <fcntl.h>
 
 using us = std::chrono::nanoseconds;
 using Time = std::chrono::steady_clock;
@@ -30,6 +32,22 @@ using Time = std::chrono::steady_clock;
 // std::cout << "AudioCallback : " << time_elapsed << std::endl;
 // assert(time_elapsed < DEADLINE_US);
 
+void setRawMode(bool enable) {
+    static termios oldt;
+    if (enable) {
+        termios newt;
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+        // rend stdin non-bloquant
+        fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
+    } else {
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        fcntl(STDIN_FILENO, F_SETFL, 0); // restaure mode bloquant
+    }
+}
+
 int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
                   double streamTime, RtAudioStreamStatus status, void *userData)
 {
@@ -44,11 +62,48 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
     for (unsigned int i = 0; i < nBufferFrames; i++) {
         self->incTotalSamples();
         self->render();
+        // std::cout << mixer.lock()->getOutput() << std::endl;
         *outBuffer++ = mixer.lock()->getOutput();
         // std::cout << "=======\n";
         // std::cout << *(outBuffer - 1) << std::endl;
     }
     return (0);
+}
+
+void checkInputs(std::shared_ptr<Envelope> env) {
+    setRawMode(true);
+
+    bool spaceHeld = false;
+    bool running = true;
+    auto lastSpace = std::chrono::steady_clock::now();
+
+    while (running) {
+        char c;
+        if (read(STDIN_FILENO, &c, 1) > 0) { // une touche est pressée
+            if (c == 'q') running = false;
+            if (c == ' ') {
+                std::cout << spaceHeld << std::endl;
+                if (!spaceHeld) {
+                    spaceHeld = true;
+                    env->setGate(true);
+                }
+                lastSpace = std::chrono::steady_clock::now(); // reset timer
+            }
+        }
+
+        // si aucun ' ' reçu depuis 50ms → relâché
+        if (spaceHeld) {
+            auto now = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastSpace).count();
+            if (elapsed > 50) {
+                spaceHeld = false;
+                env->setGate(false);
+            }
+        }
+
+        usleep(5000); // poll toutes les 5ms
+    }
+
 }
 
 int main()
@@ -71,13 +126,13 @@ int main()
     synth.addAudioModule(VCA);
     synth.addAudioModule(MIXER_4);
 
-    std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getModules();
+    std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getAudioModules();
     // for (unsigned int i = 0; i < modules.size(); i++) {
         // if (i != modules.size() - 1)
             // modules[i]->connect(modules[i], modules[i + 1]);
     // }
 
-    synth.addModulator(ENV, modules[1]);
+    std::shared_ptr<Envelope> env = std::dynamic_pointer_cast<Envelope>(synth.addModulator(ENV, modules[1]));
 
     modules[0]->audioConnect(modules[0], modules[1]);
     modules[1]->audioConnect(modules[1], modules[2]);
@@ -94,6 +149,7 @@ int main()
     //
 
     // synth.getOsc(2)->setFreq(391.995f);
+    std::cout << synth.getModulators().size() << std::endl;
 
     params.deviceId = audio.getDefaultOutputDevice();
     params.nChannels = 1;
@@ -115,19 +171,11 @@ int main()
         std::cout << audio.getErrorText() << std::endl;
         goto cleanup;
     }
+    
+    checkInputs(env);
 
-    char input;
-    std::cout << "\nPlaying ... press <enter> to quit.\n";
-    // for (int i = 0; i < 200; i++) {
-    //     usleep(10000);
-    //     synth.getOsc(0)->incFreq();
-    // }
-    // for (int j = 0; j < 200; j++) {
-    //     usleep(10000);
-    //     synth.getOsc(0)->decFreq();
-    // }
-
-    std::cin.get(input);
+    setRawMode(false);
+    audio.stopStream();
 
     // Block released ... stop the stream
     if (audio.isStreamRunning())

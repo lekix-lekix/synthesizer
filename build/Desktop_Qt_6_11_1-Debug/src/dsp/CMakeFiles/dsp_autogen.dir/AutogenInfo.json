@@ -1,0 +1,154 @@
+{
+	"BUILD_DIR" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/dsp_autogen",
+	"CMAKE_BINARY_DIR" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/lekix/Desktop/DEV/synthesizer/src/dsp",
+	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
+	"CMAKE_LIST_FILES" : [ "/home/lekix/Desktop/DEV/synthesizer/src/dsp/CMakeLists.txt" ],
+	"CMAKE_SOURCE_DIR" : "/home/lekix/Desktop/DEV/synthesizer",
+	"DEP_FILE" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/dsp_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "dsp_autogen/timestamp",
+	"HEADERS" : 
+	[
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/AudioModule.hpp",
+			"MU",
+			"UADKH3Y7ST/moc_AudioModule.cpp",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Mixer_4/Mixer_4.hpp",
+			"MU",
+			"5AAYCJ6KZB/moc_Mixer_4.cpp",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Osc/Osc.hpp",
+			"MU",
+			"LJSVITVDVG/moc_Osc.cpp",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Vca/Vca.hpp",
+			"MU",
+			"2SAKSAXCPK/moc_Vca.cpp",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Modulators/Envelope/Envelope.hpp",
+			"MU",
+			"RDK2BCW556/moc_Envelope.cpp",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Modulators/Modulator.hpp",
+			"MU",
+			"PXENQ5T3QW/moc_Modulator.cpp",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Synth.hpp",
+			"MU",
+			"EWIEGA46WW/moc_Synth.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/dsp_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/dsp_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : [ "QT_QML_DEBUG" ],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp",
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules",
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Mixer_4",
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Osc",
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Vca",
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Modulators",
+		"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Modulators/Envelope",
+		"/usr/include/c++/12",
+		"/usr/include/x86_64-linux-gnu/c++/12",
+		"/usr/include/c++/12/backward",
+		"/usr/lib/gcc/x86_64-linux-gnu/12/include",
+		"/usr/local/include",
+		"/usr/include/x86_64-linux-gnu",
+		"/usr/include"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT",
+		"Q_ENUM_NS"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/lib/ccache/g++-12",
+		"-std=gnu++17",
+		"-dM",
+		"-E",
+		"-c",
+		"/usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/dsp_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : [],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 8,
+	"PARSE_CACHE_FILE" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/CMakeFiles/dsp_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/opt/Qt/6.11.1/gcc_64/libexec/moc",
+	"QT_UIC_EXECUTABLE" : "",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 11,
+	"SETTINGS_FILE" : "/home/lekix/Desktop/DEV/synthesizer/build/Desktop_Qt_6_11_1-Debug/src/dsp/CMakeFiles/dsp_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/AudioModule.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Mixer_4/Mixer_4.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Osc/Osc.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/AudioModules/Vca/Vca.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Modulators/Envelope/Envelope.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/lekix/Desktop/DEV/synthesizer/src/dsp/Modulators/Modulator.cpp",
+			"MU",
+			null
+		],
+		[ "/home/lekix/Desktop/DEV/synthesizer/src/dsp/Synth.cpp", "MU", null ]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : [],
+	"UIC_UI_FILES" : [],
+	"VERBOSITY" : 0
+}
