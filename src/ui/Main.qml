@@ -16,5 +16,7 @@ Window {
 
     // }
 
-    OscPanel {}
+    Osc {
+        engine: osc;
+    }
 }

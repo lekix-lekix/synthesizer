@@ -16,7 +16,7 @@ qt_add_qml_module(appsynth
     URI synth
     QML_FILES
         src/ui/Main.qml
-        src/ui/OscPanel.qml
+        src/ui/Osc.qml
 )
 
 # ─── RtAudio backend ───────────────────────────────────────────────

@@ -14,12 +14,12 @@ private:
     Osc *osc_;
 
 public:
-    explicit QtOscWrapper(Osc *osc, QObject *parent = nullptr);
+    explicit            QtOscWrapper(Osc *osc, QObject *parent = nullptr);
 
-    float   getFreq() { return osc_->getFreq(); };
-    Osc     &setFreq(float newFreq) { return osc_->setFreq(newFreq); };
+    float               getFreq() { return osc_->getFreq(); };
+    Osc                 &setFreq(float newFreq) { return osc_->setFreq(newFreq); };
     Q_INVOKABLE Osc     &toggleWave() { return osc_->toggleWave(); };
-    e_wave  &getWave() { return osc_->getWave(); };
+    e_wave              &getWave() { return osc_->getWave(); };
 
 signals:
     void    freqChanged();
