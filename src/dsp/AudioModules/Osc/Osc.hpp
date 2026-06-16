@@ -21,16 +21,11 @@
 enum e_wave {
     SINE,
     SQUARE,
-    // SAW,
-    // TRIANGLE
+    SAW,
+    TRIANGLE
 };
 
 class Osc : public AudioModule {
-    private:
-        e_wave  waveType_ = { SINE };
-        float   freq = { 440.0f };
-        float   phase = { 0 };
-        
     public:
         Osc() = delete;
         ~Osc() = default;
@@ -44,7 +39,7 @@ class Osc : public AudioModule {
             this->name_ = "Osc";
             this->freq = freq;
         }
-        
+
         float   sine();
         float   square();
         float   saw();
@@ -59,11 +54,18 @@ class Osc : public AudioModule {
         void        incFreq() { this->freq++; };
         void        decFreq() { this->freq--; };
 
-        Osc     &toggleWave() {
+        Osc         &toggleWave() {
             if (waveType_ == SINE)
                 waveType_ = SQUARE;
             else
                 waveType_ = SINE;
             return *this;
         };
+
+    private:
+        e_wave  waveType_ = { SINE };
+        float   freq = { 440.0f };
+        float   phase = { 0 };
+        
+
 };
