@@ -20,15 +20,16 @@ class Vca : public AudioModule {
         float   CV_in_ = {0};
 
     public:
-        Vca() = default;
+        Vca() = delete;
         ~Vca() = default;
         Vca(const Vca &other) = default;
         Vca(Vca &&other) = default;
-        Vca &operator=(const Vca &other) = default;
-        Vca &operator=(Vca &&other) = default;
+        Vca &operator=(const Vca &other) = delete;
+        Vca &operator=(Vca &&other) = delete;
 
         Vca(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->name_ = "Vca"; };
 
-        void    setGain(float newVal) { this->gain_ = newVal; };
+        float   getGain() { return gain_; }
+        Vca     &setGain(float newVal) { gain_ = newVal; return *this; };
         void    render() override;
 };

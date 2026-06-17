@@ -23,33 +23,52 @@ constexpr float TWO_PI  = 2.0f * PI;
 
 void Osc::render() {
     // std::cout << "OSC CALLED\n";
-    this->phase += TWO_PI * this->freq / SAMPLE_RATE;
-    if (this->phase >= TWO_PI) this->phase -= TWO_PI;
+    phase_ += TWO_PI * freq_ / SAMPLE_RATE;
+    if (phase_ >= TWO_PI) phase_ -= TWO_PI;
     
     float signal = 0;
     switch (this->waveType_) {
         case SINE:
-            signal = sinf(this->phase);
+            signal = sine();
             break;
 
         case SQUARE:
-            signal = this->square();
+            signal = square();
             break;
         
-        // case SAW:
-        //     signal = this->saw();
-        //     break;
-            
+        case SAW:
+            signal = saw();
+            break;
+
+        case TRIANGLE:
+            signal = triangle();
+            break;
+
         default:
             return ;
     }
     this->audioOutput_ = signal;
 }
 
+float Osc::sine() {
+    return sinf(phase_);
+}
+
 float Osc::square() {
-    return phase < PI ? 1.0f : -1.0f;
+    return phase_ < PI ? 1.0f : -1.0f;
 }
 
 float Osc::saw() { 
-    return phase * 2.0f - 1.0f; // to fix
+    // return phase_ * 2.0f - 1.0f; // to
+    return sine();
+}
+
+float Osc::triangle() {
+    return sine();
+}
+
+Osc& Osc::toggleWave()
+{
+    waveType_ = static_cast<e_wave>((static_cast<int>(waveType_) + 1) % 4);
+    return *this;
 }

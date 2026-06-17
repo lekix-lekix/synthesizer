@@ -17,6 +17,15 @@ Window {
     // }
 
     Osc {
+        anchors.centerIn: parent;
         engine: osc;
+    }
+
+    VCA {
+        engine: vca;
+    }
+
+    Env {
+        engine: env;
     }
 }

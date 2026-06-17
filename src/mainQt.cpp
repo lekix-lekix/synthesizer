@@ -4,6 +4,8 @@
 #include "../rtaudio/RtAudio.h"
 #include "QtSynthWrapper.hpp"
 #include "QtOscWrapper.hpp"
+#include "QtVcaWrapper.hpp"
+#include "QtEnvWrapper.hpp"
 #include <QQmlContext>
 #include "constants.hpp"
 
@@ -40,15 +42,15 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.loadFromModule("synth", "Main");
+    // engine.loadFromModule("synth", "Main");
 
     Synth synth;
     QtSynthWrapper synthWrapper(synth);
     app.installEventFilter(&synthWrapper);
 
     std::shared_ptr<AudioModule> osc = synth.addAudioModule(OSC);
-    synth.addAudioModule(VCA);
-    synth.addAudioModule(MIXER_4);
+    std::shared_ptr<AudioModule> vca = synth.addAudioModule(VCA);
+    std::shared_ptr<AudioModule> mixer = synth.addAudioModule(MIXER_4);
 
     std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getAudioModules();
 
@@ -89,8 +91,16 @@ int main(int argc, char *argv[])
                   << std::endl;
     }
 
-    QtOscWrapper oscWrapper(dynamic_cast<Osc *>(osc.get()));
+    QtOscWrapper oscWrapper(dynamic_cast<Osc *>(osc.get())); // /!\ -> twice, as there is already one created in QSynthWrapper
+    QtVcaWrapper vcaWrapper(dynamic_cast<Vca *>(vca.get())); // same
+    QtEnvWrapper envWrapper(dynamic_cast<Envelope *>(env.get()));
+
     engine.rootContext()->setContextProperty("osc", &oscWrapper);
+    engine.rootContext()->setContextProperty("vca", &vcaWrapper);
+    engine.rootContext()->setContextProperty("env", &envWrapper);
+
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/src/ui/Main.qml")));
+
 
     if (audio.startStream())
     {
@@ -98,6 +108,8 @@ int main(int argc, char *argv[])
         audio.closeStream();
         return -1;
     }
+
+    std::cout << "nb of modules : " << synth.getAudioModules().size() << std::endl;
 
     // ✅ Le stream tourne en arrière-plan (thread séparé RtAudio)
     // Qt prend la main ici — audioCallback continue de s'exécuter

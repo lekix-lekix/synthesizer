@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 
 Item {
     property var engine: null; // -> access to c++ qt wrapper
@@ -8,10 +9,24 @@ Item {
         id: vco
         width: 150
         height: 500
+        // width: 100;
+        // height: 200;
         radius: 10
         border.color: "black"
         border.width: 2
         anchors.centerIn: parent
+
+
+        MultiEffect {
+            source: vco
+            anchors.fill: vco
+
+            shadowEnabled: true
+            shadowBlur: 0.8
+            shadowVerticalOffset: 4
+            shadowHorizontalOffset: 2
+            shadowColor: "#30000000"
+        }
 
         MouseArea {
             anchors.fill: parent        // couvre tout le rectangle
@@ -26,7 +41,7 @@ Item {
                 vco.anchors.centerIn = undefined
             }
 
-            onPositionChanged: {
+            onPositionChanged: function(mouse) {
                 if (dragging) {
                     vco.x += mouse.x - startX
                     vco.y += mouse.y - startY
@@ -49,8 +64,8 @@ Item {
 
         Rectangle {
             id: freqButtonContainer
-            width: 120
-            height: 120
+            width: parent.width * 0.5;
+            height: width;
             radius: 60          // cercle parfait
             border.color: "black"
             border.width: 2
@@ -58,12 +73,12 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: -parent.height * 0.1
 
-            Text {
-                text: "FREQ"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: 8
-            }
+            // Text {
+            //     text: "FREQ"
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     anchors.top: parent.top
+            //     anchors.topMargin: 8
+            // }
 
             Rectangle {
                 id: freqButton
@@ -100,7 +115,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onPositionChanged: {
+                    onPositionChanged: function(mouse) {
                         const cx = freqButton.width / 2
                         const cy = freqButton.height / 2
                         const angle = Math.atan2(mouse.y - cy, mouse.x - cx)
@@ -133,14 +148,13 @@ Item {
                     onDoubleClicked: freqButton.valeur = 0.5;
                 }
             }
+        }
 
-            Text {
-                text: freqButton.freqLabel
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 5
-            }
-
+        Text {
+            text: freqButton.freqLabel
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter;
+            anchors.verticalCenterOffset: 20
         }
 
         Rectangle {
@@ -154,25 +168,42 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: parent.height / 4
 
+            // MultiEffect {
+            //     source: wavesContainer
+            //     anchors.fill: wavesContainer
+
+            //     shadowEnabled: true
+            //     shadowBlur: 0.8
+            //     shadowVerticalOffset: 4
+            //     shadowHorizontalOffset: 2
+            //     shadowColor: "#30000000"
+            // }
+
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 8
                 width: parent.width
+                height: parent.height
                 spacing: 4
 
                 // Les 4 formes d'onde
                 RowLayout {
-                    Layout.fillWidth: true
-
+// /                    // Layout.fillWidth: true
+                    width: parent.width
+                    height: parent.height
                     Repeater {
                         model: ["sine", "square", "saw", "triangle"]
                         ColumnLayout {
-                            Layout.fillWidth: true
+                            width: parent.width
+                            height: parent.height
+                            // Layout.fillWidth: true
                             property string waveType: modelData
 
                             Canvas {
-                                width: 20
-                                height: 15
+                                width: parent.width / 6
+                                height: parent.height / 6
+                                // width: parent.width / 4
+                                // height: width;
                                 Layout.alignment: Qt.AlignHCenter
                                 onPaint: {
                                     var ctx = getContext("2d")
@@ -213,21 +244,20 @@ Item {
                         }
                     }
                 }
-
-                // Bouton en dessous
                 Rectangle {
                     id: underButton
-                    width: parent.width * 0.50;
-                    height: parent.height * 0.25;
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    anchors.bottom: parent.bottom;
+
+                    Layout.preferredWidth: parent.width * 0.50
+                    Layout.preferredHeight: parent.height * 0.25
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+
                     radius: 5
                     border.color: "black"
                     border.width: 2
 
                     MouseArea {
-                        anchors.fill: parent;
-                        onClicked: {engine.toggleWave();
+                        anchors.fill: parent   // ✅ OK
+                        onClicked: engine.toggleWave()
                     }
                 }
             }
@@ -237,72 +267,28 @@ Item {
             id: jacksContainer
             width: parent.width * 0.75
             height: parent.height / 8
-            border.color: "black"
-            border.width: 2
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
 
-            // Jack 1V/OCT à gauche
-            Rectangle {
-                id: vPerOct
-                width: parent.width / 2
-                height: parent.height
+            Jack {
+                label: "CV"
                 anchors.left: parent.left
-
-                Text {
-                    text: "1V/OCT"
-                    font.pointSize: 8
-                    anchors.top: parent.top
-                    anchors.topMargin: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Rectangle {
-                    width: height
-                    height: parent.height * 0.5
-                    radius: width / 2       // cercle
-                    border.color: "black"
-                    border.width: 2
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+                anchors.margins: 6;
             }
 
-            // Séparateur
             Rectangle {
-                width: 1
-                height: parent.height * 0.7
-                color: "black"
-                anchors.centerIn: parent
+                height: parent.height;
+                width: 1;
+                border.color: "black";
+                border.width: 1;
+                anchors.horizontalCenter: parent.horizontalCenter;
             }
 
-            // Jack OUT à droite
-            Rectangle {
-                id: jackOut
-                width: parent.width / 2
-                height: parent.height
-                anchors.right: parent.right
-
-                Text {
-                    text: "OUT"
-                    font.pointSize: 8
-                    anchors.top: parent.top
-                    anchors.topMargin: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Rectangle {
-                    width: height
-                    height: parent.height * 0.5
-                    radius: width / 2       // cercle
-                    border.color: "black"
-                    border.width: 2
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+            Jack {
+                label: "OUT"
+                anchors.right: parent.right;
+                anchors.margins: 6;
             }
         }
     }

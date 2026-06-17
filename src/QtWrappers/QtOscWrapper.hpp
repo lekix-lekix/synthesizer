@@ -18,11 +18,12 @@ public:
 
     float               getFreq() { return osc_->getFreq(); };
     Osc                 &setFreq(float newFreq) { return osc_->setFreq(newFreq); };
-    Q_INVOKABLE void    toggleWave() { osc_->toggleWave(); emit waveChanged(); };
+
     e_wave              &getWave() { return osc_->getWave(); };
     QString             getWaveQstr();
+    Q_INVOKABLE void    toggleWave() { osc_->toggleWave(); emit waveChanged(); };
 
 signals:
-    void    freqChanged();
-    void    waveChanged();
+    void                freqChanged();
+    void                waveChanged();
 };

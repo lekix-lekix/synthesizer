@@ -2,6 +2,7 @@ add_library(wrappers STATIC
     QtSynthWrapper.cpp
     QtEnvWrapper.cpp
     QtOscWrapper.cpp
+    QtVcaWrapper.hpp QtVcaWrapper.cpp
     # QtOscWrapper.cpp
 )
 

@@ -36,36 +36,32 @@ class Osc : public AudioModule {
 
         Osc(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->name_ = "Osc"; };
         Osc(const uint64_t totalSamplesElapsed, const float &freq) : AudioModule(totalSamplesElapsed) {
-            this->name_ = "Osc";
-            this->freq = freq;
+            name_ = "Osc";
+            freq_ = freq;
         }
 
         float   sine();
         float   square();
         float   saw();
+        float   triangle();
+
         void    render() override;
 
-        float       getFreq() { return this->freq; };
-        Osc         &setFreq(float newFreq) { this->freq = newFreq; return *this; };
+        float       getFreq() { return freq_; };
+        Osc         &setFreq(float newFreq) { freq_= newFreq; return *this; };
 
         Osc         &setWave(e_wave newWaveType) { this->waveType_ = newWaveType; return *this; };
         e_wave      &getWave() { return this->waveType_; };
 
-        void        incFreq() { this->freq++; };
-        void        decFreq() { this->freq--; };
+        void        incFreq() { freq_++; };
+        void        decFreq() { freq_--; };
 
-        Osc         &toggleWave() {
-            if (waveType_ == SINE)
-                waveType_ = SQUARE;
-            else
-                waveType_ = SINE;
-            return *this;
-        };
+        Osc         &toggleWave();
 
     private:
         e_wave  waveType_ = { SINE };
-        float   freq = { 440.0f };
-        float   phase = { 0 };
+        float   freq_ = { 440.0f };
+        float   phase_ = { 0 };
         
 
 };
