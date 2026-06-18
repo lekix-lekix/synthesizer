@@ -20,12 +20,12 @@ class Modulator
         float CV_out_ = {0};
 
     public:
-        Modulator() = default;
+        Modulator() = delete;
         virtual ~Modulator() = default;
         Modulator(const Modulator &other) = default;
         Modulator(Modulator &&other) = default;
-        Modulator &operator=(const Modulator &other) = default;
-        Modulator &operator=(Modulator &&other) = default;
+        Modulator &operator=(const Modulator &other) = delete;
+        Modulator &operator=(Modulator &&other) = delete;
 
         const uint64_t &totalSamplesElapsed_;
         

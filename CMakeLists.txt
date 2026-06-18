@@ -21,6 +21,7 @@ qt_add_qml_module(appsynth
         QML_FILES src/ui/Jack.qml
         QML_FILES src/ui/Env.qml
         QML_FILES src/ui/VSlider.qml
+        QML_FILES src/ui/Mixer4.qml
 )
 
 # ─── RtAudio backend ───────────────────────────────────────────────

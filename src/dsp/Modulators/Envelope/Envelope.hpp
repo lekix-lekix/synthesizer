@@ -50,18 +50,30 @@ class Envelope : public Modulator
         ~Envelope() = default;
         Envelope(const Envelope &other) = default;
         Envelope(Envelope &&other) = default;
-        Envelope &operator=(const Envelope &other) = default;
-        Envelope &operator=(Envelope &&other) = default;
+        Envelope &operator=(const Envelope &other) = delete;
+        Envelope &operator=(Envelope &&other) = delete;
 
         Envelope(const uint64_t &totalSamplesElapsed) : Modulator(totalSamplesElapsed) {};
 
         ADSR            &getADSR() { return adsr_; };
-        Envelope        &setAttack(float time_ms) { adsr_.atk_ms = time_ms; return *this; };
-        Envelope        &setGate(bool gateState);
 
-        float   attack();
-        float   decay();
-        float   sustain();
-        float   release();
-        void    render();
+        float           &getAttack() { return adsr_.atk_ms; };
+        float           &getDecay() { return adsr_.dec_ms; };
+        float           &getSustain() { return adsr_.sus_gain; };
+        float           &getRelease() { return adsr_.rel_ms; };
+
+        Envelope        &setAttack(float time_ms) { adsr_.atk_ms = time_ms; return *this; };
+        Envelope        &setDecay(float time_ms) { adsr_.dec_ms = time_ms; return *this; };
+        Envelope        &setSustain(float time_ms) { adsr_.sus_gain = time_ms; return *this; };
+        Envelope        &setRelease(float time_ms) { adsr_.rel_ms = time_ms; return *this; };
+
+        Envelope        &setGate(bool gateState) { gate_ = gateState; return *this; };
+
+        void            checkGate();
+        float           attack();
+        float           decay();
+        float           sustain();
+        float           release();
+        
+        void            render();
 };

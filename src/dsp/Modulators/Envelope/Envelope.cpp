@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 16:49:59 by lekix             #+#    #+#             */
-/*   Updated: 2026/06/10 13:05:55 by lekix            ###   ########.fr       */
+/*   Updated: 2026/06/18 14:18:05 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "constants.hpp"
 
 void Envelope::render() {
+    checkGate();
     float signal = 0;
     switch (state_)
     {
@@ -45,10 +46,10 @@ void Envelope::render() {
 float Envelope::attack() {
     if (state_ == IDLE)
         return 0;
-    if (startFrame_ > 0 && gate_ == false) {
-        state_ = RELEASE;
-        initRelease_ = true;
-    }
+    // if (startFrame_ > 0 && gate_ == false) {
+    //     state_ = RELEASE;
+    //     initRelease_ = true;
+    // }
     if (startFrame_ == 0)
         startFrame_ = totalSamplesElapsed_;
     float totalSteps = adsr_.atk_ms * SAMPLE_RATE_1MS; // --> N
@@ -63,10 +64,10 @@ float Envelope::attack() {
 }
 
 float Envelope::decay() {
-    if (gate_ == false) {
-        state_ = RELEASE;
-        initRelease_ = true;
-    }
+    // if (gate_ == false) {
+    //     state_ = RELEASE;
+    //     initRelease_ = true;
+    // }
     if (startFrame_ == 0) {
         startFrame_ = totalSamplesElapsed_;
     }
@@ -83,10 +84,10 @@ float Envelope::decay() {
 }
 
 float Envelope::sustain() {
-    if (gate_ == false) {
-        state_ = RELEASE;
-        initRelease_ = true;
-    }
+    // if (gate_ == false) {
+    //     state_ = RELEASE;
+    //     initRelease_ = true;
+    // }
     return adsr_.sus_gain;
 }
 
@@ -108,12 +109,15 @@ float Envelope::release() {
     return initReleaseValue_ + t * (0 - initReleaseValue_);
 }
 
-Envelope &Envelope::setGate(bool gateState) {
-    gate_ = gateState;
-    if (state_ == IDLE)
+void    Envelope::checkGate() {
+    if (!gate_ && (state_ == ATTACK || state_ == DECAY || state_ == SUSTAIN)) {
+        state_ = RELEASE;
+        initRelease_ = true;
+        return ;
+    }
+    if (gate_ && (state_ == IDLE || state_ == RELEASE))
         state_ = ATTACK;
-    return *this;
-};
+}
 
 // v[n+1] = v[n] + (b2 ​− b1​​) / N -> linear enveloppe
 

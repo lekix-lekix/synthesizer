@@ -3,8 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Window {
-    width: 800
-    height: 600
+    width: 1280
+    height: 960
     visible: true
     title: qsTr("Hello World")
 
@@ -21,11 +21,23 @@ Window {
         engine: osc;
     }
 
+    Osc {
+        anchors.centerIn: parent;
+        engine: osc2;
+    }
+
     VCA {
+        anchors.centerIn: parent;
         engine: vca;
     }
 
     Env {
+        anchors.centerIn: parent;
         engine: env;
+    }
+
+    Mixer4 {
+        anchors.centerIn: parent;
+        engine: mixer;
     }
 }

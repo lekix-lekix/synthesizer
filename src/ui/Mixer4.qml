@@ -18,7 +18,7 @@ Item {
 
         Text {
             id: title
-            text: "ENV"
+            text: "MIXER 4"
             font.pointSize: 24
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
@@ -77,34 +77,15 @@ Item {
 
                         VSlider {
                             from: 0
-                            to: 1000;
-                            value: {engine ? engine.attack : 0}
+                            to: 1;
+                            value: {engine ? engine.gain0 : 1}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {engine.attack = value}
+                            onValueChanged: {engine.gain0 = value}
                         }
 
                         Text {
-                            text: "A";
-                            Layout.alignment: Qt.AlignHCenter
-                        }
-                    }
-                    ColumnLayout {
-                        Layout.fillHeight: true
-                        Layout.alignment: Qt.AlignHCenter
-                        spacing: 5
-
-                        VSlider {
-                            from: 0
-                            to: 2000;
-                            value: {engine ? engine.decay : 0}
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {engine.decay = value}
-                        }
-
-                        Text {
-                            text: "D";
+                            text: "1";
                             Layout.alignment: Qt.AlignHCenter
                         }
                     }
@@ -116,14 +97,14 @@ Item {
                         VSlider {
                             from: 0
                             to: 1;
-                            value: {engine ? engine.sustain : 0}
+                            value: {engine ? engine.gain1 : 1}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {engine.sustain = value}
+                            onValueChanged: {engine.gain1 = value}
                         }
 
                         Text {
-                            text: "S";
+                            text: "2";
                             Layout.alignment: Qt.AlignHCenter
                         }
                     }
@@ -134,14 +115,33 @@ Item {
 
                         VSlider {
                             from: 0
-                            to: 2000;
-                            value: {engine ? engine.release : 0}
+                            to: 1;
+                            value: {engine ? engine.gain2 : 1}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {engine.release = value }
+                            onValueChanged: {engine.gain2 = value}
+                        }
+
+                        Text {
+                            text: "3";
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 5
+
+                        VSlider {
+                            from: 0
+                            to: 1;
+                            value: {engine ? engine.gain3 : 1}
+                            Layout.fillHeight: true
+                            Layout.alignment: Qt.AlignHCenter
+                            onValueChanged: {engine.gain3 = value}
                         }
                         Text {
-                            text: "R";
+                            text: "4";
                             Layout.alignment: Qt.AlignHCenter
                         }
                     }

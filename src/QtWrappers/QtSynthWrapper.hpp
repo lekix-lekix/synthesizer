@@ -17,9 +17,15 @@ class QtSynthWrapper : public QObject {
     Q_PROPERTY(QVariantList qtAudioModules READ getAudioModules NOTIFY audioModulesChanged);
     Q_PROPERTY(QVariantList qtModulators READ getModulators NOTIFY modulatorsChanged);
 
+private:
+    Synth               &synth_;
+    QVariantList        qtAudioModules_;
+    QVariantList        qtModulators_;
+
 public:
-    explicit QtSynthWrapper(Synth &synth, QObject *parent = nullptr);
-    bool eventFilter(QObject *obj, QEvent *event) override;
+    explicit            QtSynthWrapper(Synth &synth, QObject *parent = nullptr);
+    
+    bool                eventFilter(QObject *obj, QEvent *event) override;
 
     QtSynthWrapper      &setGate(bool state);
     Synth               &getSynth() { return this->synth_; };
@@ -27,16 +33,11 @@ public:
     QVariantList        &getModulators() { return this->qtModulators_; };
 
 signals:
-    void gateChanged();
-    void audioModulesChanged();
-    void modulatorsChanged();
-
-private:
-    Synth &synth_;
-    QVariantList qtAudioModules_;
-    QVariantList qtModulators_;
+    void                gateChanged();
+    void                audioModulesChanged();
+    void                modulatorsChanged();
 
 private slots:
-    void onModulatorCreated(Modulator *newModule, e_modulators type);
-    void onAudioModuleCreated(AudioModule *newModule, e_audioModules type);
+    void                onModulatorCreated(Modulator *newModule, e_modulators type);
+    void                onAudioModuleCreated(AudioModule *newModule, e_audioModules type);
 };

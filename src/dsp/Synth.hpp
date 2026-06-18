@@ -61,7 +61,12 @@ class Synth
         std::weak_ptr<Mixer_4> getMaster() {
             if (audioModules_.empty())
                 return {};
-            return std::dynamic_pointer_cast<Mixer_4>(audioModules_.back());
+            for (auto &module : audioModules_) {
+                std::weak_ptr<Mixer_4> mixer = std::dynamic_pointer_cast<Mixer_4>(module);
+                if (mixer.lock())
+                    return (mixer);
+            }
+            return {};
         }
 
         std::function<void(Modulator*, e_modulators)> onModulatorCreated;

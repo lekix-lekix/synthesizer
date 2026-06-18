@@ -188,7 +188,6 @@ Item {
 
                 // Les 4 formes d'onde
                 RowLayout {
-// /                    // Layout.fillWidth: true
                     width: parent.width
                     height: parent.height
                     Repeater {

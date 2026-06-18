@@ -3,6 +3,8 @@ add_library(wrappers STATIC
     QtEnvWrapper.cpp
     QtOscWrapper.cpp
     QtVcaWrapper.hpp QtVcaWrapper.cpp
+    QtMixer4Wrapper.hpp QtMixer4Wrapper.cpp
+
     # QtOscWrapper.cpp
 )
 

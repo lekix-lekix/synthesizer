@@ -6,6 +6,7 @@
 #include "QtOscWrapper.hpp"
 #include "QtVcaWrapper.hpp"
 #include "QtEnvWrapper.hpp"
+#include "QtMixer4Wrapper.hpp"
 #include <QQmlContext>
 #include "constants.hpp"
 
@@ -52,16 +53,17 @@ int main(int argc, char *argv[])
     std::shared_ptr<AudioModule> vca = synth.addAudioModule(VCA);
     std::shared_ptr<AudioModule> mixer = synth.addAudioModule(MIXER_4);
 
+    std::shared_ptr<AudioModule> osc2 = synth.addAudioModule(OSC);
+
     std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getAudioModules();
 
     std::cout << modules.size() << std::endl;
 
     modules[0]->audioConnect(modules[0], modules[1]);
     modules[1]->audioConnect(modules[1], modules[2]);
+    modules[3]->audioConnect(modules[3], modules[1]);
 
     std::shared_ptr<Envelope> env = std::dynamic_pointer_cast<Envelope>(synth.addModulator(ENV, modules[1]));
-
-    // env->setGate(true);
 
     RtAudio audio;
     RtAudio::StreamParameters params;
@@ -92,12 +94,16 @@ int main(int argc, char *argv[])
     }
 
     QtOscWrapper oscWrapper(dynamic_cast<Osc *>(osc.get())); // /!\ -> twice, as there is already one created in QSynthWrapper
+    QtOscWrapper oscWrapper2(dynamic_cast<Osc *>(osc2.get()));
     QtVcaWrapper vcaWrapper(dynamic_cast<Vca *>(vca.get())); // same
     QtEnvWrapper envWrapper(dynamic_cast<Envelope *>(env.get()));
+    QtMixer4Wrapper mixerWrapper(dynamic_cast<Mixer_4 *>(mixer.get()));
 
     engine.rootContext()->setContextProperty("osc", &oscWrapper);
+    engine.rootContext()->setContextProperty("osc2", &oscWrapper2);
     engine.rootContext()->setContextProperty("vca", &vcaWrapper);
     engine.rootContext()->setContextProperty("env", &envWrapper);
+    engine.rootContext()->setContextProperty("mixer", &mixerWrapper);
 
     engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/src/ui/Main.qml")));
 

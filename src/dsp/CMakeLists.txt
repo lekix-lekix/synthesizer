@@ -13,6 +13,7 @@ target_sources(dsp PRIVATE
     AudioModules/AudioModule.hpp
     AudioModules/Osc/Osc.hpp
     AudioModules/Vca/Vca.hpp
+    AudioModules/Mixer_4/Mixer_4.hpp
     Modulators/Modulator.hpp
     Modulators/Envelope/Envelope.hpp
     Synth.hpp
