@@ -13,7 +13,6 @@ Window {
         // to: 2000
         // value: osc.frequency       // ← lit ta Q_PROPERTY
         // onValueChanged: osc.freq = value  // ← appelle ton setter
-
     // }
 
     Osc {

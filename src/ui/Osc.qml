@@ -168,17 +168,6 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: parent.height / 4
 
-            // MultiEffect {
-            //     source: wavesContainer
-            //     anchors.fill: wavesContainer
-
-            //     shadowEnabled: true
-            //     shadowBlur: 0.8
-            //     shadowVerticalOffset: 4
-            //     shadowHorizontalOffset: 2
-            //     shadowColor: "#30000000"
-            // }
-
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 8
@@ -269,11 +258,14 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
+            // border.color: "black"
+            // border.width: 2;
 
             Jack {
-                label: "CV"
+                label: "OUT"
                 anchors.left: parent.left
-                anchors.margins: 6;
+                // anchors.leftMargin: parent.width / 4
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             Rectangle {
@@ -285,9 +277,11 @@ Item {
             }
 
             Jack {
-                label: "OUT"
+                label: "CV"
                 anchors.right: parent.right;
-                anchors.margins: 6;
+                // anchors.rightMargin: parent.width / 4
+                anchors.verticalCenter: parent.verticalCenter
+                // anchors.margins: 6;
             }
         }
     }
