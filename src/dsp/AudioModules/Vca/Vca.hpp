@@ -12,24 +12,17 @@
 
 #pragma once
 
-#include "AudioModule.hpp"
+#include "dsp/AudioModules/AudioModule.hpp"
 
 class Vca : public AudioModule {
-    private:
-        float   gain_ = {1};
-        float   CV_in_ = {0};
-
     public:
-        Vca() = delete;
-        ~Vca() = default;
-        Vca(const Vca &other) = default;
-        Vca(Vca &&other) = default;
-        Vca &operator=(const Vca &other) = delete;
-        Vca &operator=(Vca &&other) = delete;
+        Vca() : AudioModule("Vca") {};
+        Vca(const float &gain) : AudioModule("Vca") { this->gain = std::move(gain); };
 
-        Vca(const uint64_t &totalSamplesElapsed) : AudioModule(totalSamplesElapsed) { this->name_ = "Vca"; };
+        float   gain = { 1 };
+        float   audioInput = { 0 };
+        float   audioOutput = { 0 };
+        float   CV_in = { 0 };
 
-        float   getGain() { return gain_; }
-        Vca     &setGain(float newVal) { gain_ = newVal; return *this; };
         void    render() override;
 };

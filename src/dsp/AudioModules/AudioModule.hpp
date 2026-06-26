@@ -12,41 +12,26 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
 #include <string>
-
-#include "Modulator.hpp"
 
 class AudioModule {
     protected:
-        std::string                                 name_;
-        float                                       audioInput_;
-        float                                       audioOutput_;
-
-        std::vector<std::weak_ptr<AudioModule>>     inputs_;
-        std::vector<std::weak_ptr<AudioModule>>     outputs_;
-        std::vector<std::weak_ptr<Modulator>>       modulators_;
+        std::string         name_;
+        uint64_t            totalSamplesElapsed_ = { 0 };
     
     public:
         AudioModule() = delete;
+        explicit AudioModule(std::string name) : name_(std::move(name)) {}
         virtual ~AudioModule() = default;
         AudioModule(const AudioModule &other) = default;
         AudioModule(AudioModule &&other) = default;
         AudioModule &operator=(const AudioModule &other) = delete;
         AudioModule &operator=(AudioModule &&other) = delete;
         
-        const uint64_t &totalSamplesElapsed_;
-        AudioModule(const uint64_t &totalSamplesElapsed) : totalSamplesElapsed_(totalSamplesElapsed) {};
-        
-        void addModulator(std::shared_ptr<Modulator> modulator);
-        // void addInput(std::shared_ptr<AudioModule> other);
-        // void addOutput(std::shared_ptr<AudioModule> other);
-        void audioConnect(std::shared_ptr<AudioModule> from, std::shared_ptr<AudioModule> to);
+        const std::string   &getName() { return name_; };
+        const uint64_t      &getTotalSamplesElapsed() { return totalSamplesElapsed_; };
 
-        virtual float &getInput() { return this->audioInput_; };
-        virtual float &getOutput() { return this->audioOutput_; };
-        std::string const &getName() { return this->name_; };
+        AudioModule         &incTotalSamplesElapsed() { totalSamplesElapsed_ += 1; return *this; };
 
         virtual void render() = 0;
 };

@@ -14,17 +14,13 @@
 // #include <iostream>
 
 void Mixer_4::render() {
-    this->audioInput_ = 0;
-    int idx = 0;
-    // std::cout << "MIXER CALLED\n";
-    for (auto &input : this->inputs_) {
-        // input.lock()->render();
-        this->audioInput_ += (input.lock()->getOutput() * gains_[idx]);
-        idx++;
-        // std::cout << input.lock()->getName() << std::endl;
+    float signal = 0;
+
+    for (int i = 0; i < 4; i++) {
+        signal += (this->audioInputs[i] * gains_[i]);
     }
-    this->audioOutput_ = this->audioInput_;
-    // std::cout << audioOutput_ << std::endl;
+    this->audioOutput = signal;
+    incTotalSamplesElapsed();
 }
 
 float Mixer_4::getGain(int idx) {

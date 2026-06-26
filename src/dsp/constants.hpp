@@ -21,16 +21,13 @@ inline extern constexpr float operator""_s(long double v)   { return (float)(v *
 
 inline extern constexpr uint16_t BUFFER_FRAMES        = 64;
 inline extern constexpr uint16_t SAMPLE_RATE          = 44100;
-inline extern constexpr uint16_t SAMPLE_RATE_1MS      = 44.1;
+inline extern constexpr float    SAMPLE_RATE_1MS      = 44.1;
 inline extern constexpr float    DEADLING_US          = static_cast<float>(BUFFER_FRAMES) / static_cast<float>(SAMPLE_RATE) * 1000000;
 inline extern constexpr float    DEADLING_MS          = static_cast<float>(BUFFER_FRAMES) / static_cast<float>(SAMPLE_RATE) * 1000;
 
 enum e_audioModules {
-    OSC,
+    VCO,
     VCA,
-    MIXER_4
-};
-
-enum e_modulators {
-    ENV
+    ENV,
+    MIXER_4,
 };

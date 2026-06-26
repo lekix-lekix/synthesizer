@@ -11,16 +11,8 @@
 /* ************************************************************************** */
 
 #include "Vca.hpp"
-#include <iostream>
 
 void Vca::render() {
-    this->audioInput_ = 0;
-    this->CV_in_ = 0;
-    for (auto &input : this->inputs_)
-        this->audioInput_ += input.lock()->getOutput();
-    for (auto &modulator : this->modulators_) {
-        modulator.lock()->render();
-        this->CV_in_ += modulator.lock()->getCVOut();
-    }
-    this->audioOutput_ = this->audioInput_ * (this->gain_ * (CV_in_ / 10.0f));
+    this->audioOutput = this->audioInput * (this->gain * (this->CV_in / 10.0f));
+    incTotalSamplesElapsed();
 }

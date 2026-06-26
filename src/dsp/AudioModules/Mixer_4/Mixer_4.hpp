@@ -14,25 +14,21 @@
 
 #include <array>
 
-#include "AudioModule.hpp"
+#include "dsp/AudioModules/AudioModule.hpp"
 
 class Mixer_4 : public AudioModule {
     private:
-        std::array<float, 4> gains_ = {1};
+        std::array<float, 4>    gains_ = { 1 };
 
     public:
-        Mixer_4() = delete;
-        ~Mixer_4() = default;
-        Mixer_4(const Mixer_4 &other) = default;
-        Mixer_4(Mixer_4 &&other) = default;
-        Mixer_4 &operator=(Mixer_4 const &other) = delete;
-        Mixer_4 &operator=(Mixer_4 &&other) = delete;
+        Mixer_4() : AudioModule("Mixer_4") {}
 
-        Mixer_4(const uint64_t& totalSamplesElapsed) : AudioModule(totalSamplesElapsed) {}
+        std::array<float, 4>    audioInputs = { 0 };
+        float                   audioOutput = { 0 };
 
         std::array<float, 4>    &getGains() { return this->gains_; };
         float                   getGain(int idx);
         Mixer_4                 &setGain(int idx, float newGain);
 
-        void                    render();
+        void                    render() override;
 };
