@@ -48,8 +48,10 @@ int main(int argc, char *argv[])
     // engine.loadFromModule("synth", "Main");
 
     Synth synth;
-    QtSynthWrapper synthWrapper(synth);
+    QtSynthWrapper synthWrapper(synth, engine);
     app.installEventFilter(&synthWrapper);
+
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/ui/Main.qml")));
 
     std::shared_ptr<AudioModule> osc = synth.addAudioModule(VCO);
     std::shared_ptr<AudioModule> osc2 = synth.addAudioModule(VCO);
@@ -98,19 +100,17 @@ int main(int argc, char *argv[])
                   << std::endl;
     }
 
-    QtVcoWrapper oscWrapper(dynamic_cast<Vco *>(osc.get())); // /!\ -> twice, as there is already one created in QSynthWrapper
-    QtVcoWrapper oscWrapper2(dynamic_cast<Vco *>(osc2.get()));
-    QtVcaWrapper vcaWrapper(dynamic_cast<Vca *>(vca.get())); // same
-    QtEnvWrapper envWrapper(dynamic_cast<Env *>(env.get()));
-    QtMixer4Wrapper mixerWrapper(dynamic_cast<Mixer_4 *>(mixer.get()));
+    // QtVcoWrapper oscWrapper(dynamic_cast<Vco *>(osc.get())); // /!\ -> twice, as there is already one created in QSynthWrapper
+    // QtVcoWrapper oscWrapper2(dynamic_cast<Vco *>(osc2.get()));
+    // QtVcaWrapper vcaWrapper(dynamic_cast<Vca *>(vca.get())); // same
+    // QtEnvWrapper envWrapper(dynamic_cast<Env *>(env.get()));
+    // QtMixer4Wrapper mixerWrapper(dynamic_cast<Mixer_4 *>(mixer.get()));
 
-    engine.rootContext()->setContextProperty("osc", &oscWrapper);
-    engine.rootContext()->setContextProperty("osc2", &oscWrapper2);
-    engine.rootContext()->setContextProperty("vca", &vcaWrapper);
-    engine.rootContext()->setContextProperty("env", &envWrapper);
-    engine.rootContext()->setContextProperty("mixer", &mixerWrapper);
-
-    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/ui/Main.qml")));
+    // engine.rootContext()->setContextProperty("osc", &oscWrapper);
+    // engine.rootContext()->setContextProperty("osc2", &oscWrapper2);
+    // engine.rootContext()->setContextProperty("vca", &vcaWrapper);
+    // engine.rootContext()->setContextProperty("env", &envWrapper);
+    // engine.rootContext()->setContextProperty("mixer", &mixerWrapper);
 
     if (audio.startStream())
     {

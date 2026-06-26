@@ -16,8 +16,8 @@ qt_add_qml_module(synth_pcbuild
     URI synth
     QML_FILES
         ui/Main.qml
-        ui/Osc.qml
-        ui/VCA.qml
+        ui/Vco.qml
+        ui/Vca.qml
         ui/Jack.qml
         ui/Env.qml
         ui/VSlider.qml

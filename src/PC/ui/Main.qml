@@ -3,33 +3,41 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Window {
+    // id: windowRoot
     width: 1280
     height: 960
     visible: true
     title: qsTr("Hello World")
 
-    Osc {
-        anchors.centerIn: parent;
-        engine: osc;
+    Item {
+        id: mainContainer
+        objectName: "mainContainer"
+        width: parent.width
+        height: parent.height
     }
 
-    Osc {
-        anchors.centerIn: parent;
-        engine: osc2;
-    }
+    // Vco {
+    //     anchors.centerIn: parent;
+    //     engine: osc;
+    // }
 
-    VCA {
-        anchors.centerIn: parent;
-        engine: vca;
-    }
+    // Vco {
+    //     anchors.centerIn: parent;
+    //     engine: osc2;
+    // }
 
-    Env {
-        anchors.centerIn: parent;
-        engine: env;
-    }
+    // Vca {
+    //     anchors.centerIn: parent;
+    //     engine: vca;
+    // }
 
-    Mixer4 {
-        anchors.centerIn: parent;
-        engine: mixer;
-    }
+    // Env {
+    //     anchors.centerIn: parent;
+    //     engine: env;
+    // }
+
+    // Mixer4 {
+    //     anchors.centerIn: parent;
+    //     engine: mixer;
+    // }
 }
