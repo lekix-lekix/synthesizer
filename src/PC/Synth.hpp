@@ -23,7 +23,6 @@
 
 #include "Patch.hpp"
 
-// template <typename T>
 class Synth
 {
     private:

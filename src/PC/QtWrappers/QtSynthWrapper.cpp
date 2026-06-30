@@ -5,6 +5,7 @@ QtSynthWrapper::QtSynthWrapper(Synth &synth, QQmlApplicationEngine &appEngine, Q
     synth.onAudioModuleCreated = [this](AudioModule *newModule, e_audioModules type) {
         this->onAudioModuleCreated(newModule, type);
     };
+    appEngine_.rootContext()->setContextProperty("synth", this);
 }
 
 QtSynthWrapper &QtSynthWrapper::setGate(bool state) { // TO CHANGE
@@ -48,7 +49,7 @@ bool QtSynthWrapper::eventFilter(QObject *obj, QEvent *event) { // to move into 
     return QObject::eventFilter(obj, event); // ← important : passer les autres événements
 }
 
-void QtSynthWrapper::onAudioModuleCreated(AudioModule *newModule, e_audioModules type) { // BIG TROUBLE
+void QtSynthWrapper::onAudioModuleCreated(AudioModule *newModule, e_audioModules type) {
     QObject *moduleWrapper = nullptr;
     QString moduleUrl("qrc:/qt/qml/synth/ui/");
 
@@ -90,15 +91,25 @@ void QtSynthWrapper::onAudioModuleCreated(AudioModule *newModule, e_audioModules
         std::cerr << "Error while creating AudioModule" << std::endl;
         return ;
     }
+    qtAudioModules_.append(QVariant::fromValue(moduleWrapper));
+    this->insertQmlModule(moduleUrl, moduleWrapper);
+}
+
+void QtSynthWrapper::insertQmlModule(QString moduleUrl, QObject *moduleWrapper) {
     QQmlComponent component(&appEngine_, QUrl(moduleUrl));
-    QObject *obj = component.create();
+    QVariantMap initialProps;
+    std::cerr << "moduleWrapper ptr: " << moduleWrapper << std::endl;
+    initialProps["engine"] = QVariant::fromValue(moduleWrapper);
+    QObject *obj = component.createWithInitialProperties(initialProps, appEngine_.rootContext());
+    if (obj) {
+        QVariant v = obj->property("engine");
+        std::cerr << "engine property isValid: " << v.isValid()
+                  << " isNull: " << v.isNull() << std::endl;
+    }
     if (!obj) {
         std::cerr << "Error while creating QtComponent: " << component.errorString().toStdString() << std::endl;
         return;
     }
-
-    obj->setProperty("engine", QVariant::fromValue(moduleWrapper));
-    qtAudioModules_.append(QVariant::fromValue(moduleWrapper));
 
     QList<QObject*> rootObjs = appEngine_.rootObjects();
     std::cerr << "rootObjects count: " << rootObjs.size() << std::endl;
@@ -119,17 +130,4 @@ void QtSynthWrapper::onAudioModuleCreated(AudioModule *newModule, e_audioModules
     }
 
     item->setParentItem(mainContainer);
-
-    // QQuickItem *item = qobject_cast<QQuickItem *>(obj);
-    // QList<QObject*> rootObjs = appEngine_.rootObjects();
-    // QObject *root = rootObjs.first();
-    // QQuickWindow *windowRoot = qobject_cast<QQuickWindow*>(root);
-    // if (!windowRoot) {
-        // std::cerr << "root is not a QQuickWindow" << std::endl;
-        // return;
-    // }
-
-    // QQuickItem *container = windowRoot->contentItem();  // <-- le vrai item racine utilisable comme parent
-    // item->setParentItem(container);
-
 }

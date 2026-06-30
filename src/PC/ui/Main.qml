@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Window {
-    // id: windowRoot
     width: 1280
     height: 960
     visible: true
@@ -12,32 +11,26 @@ Window {
     Item {
         id: mainContainer
         objectName: "mainContainer"
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
+
+        property var synth: null;
+
+        Button {
+            id: moduleButton
+            width: 50
+            height: 50
+            anchors.top: parent.top
+            anchors.right: parent.right
+            onClicked: menu.open()
+        }
+
+        ModulesMenu {
+            id: menu
+        }
+
+        Drawer {
+            height: parent.height
+            width: parent.width / 4
+        }
     }
-
-    // Vco {
-    //     anchors.centerIn: parent;
-    //     engine: osc;
-    // }
-
-    // Vco {
-    //     anchors.centerIn: parent;
-    //     engine: osc2;
-    // }
-
-    // Vca {
-    //     anchors.centerIn: parent;
-    //     engine: vca;
-    // }
-
-    // Env {
-    //     anchors.centerIn: parent;
-    //     engine: env;
-    // }
-
-    // Mixer4 {
-    //     anchors.centerIn: parent;
-    //     engine: mixer;
-    // }
 }

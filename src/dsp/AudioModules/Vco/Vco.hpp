@@ -13,6 +13,7 @@
 #pragma once
 
 #include <cmath>
+#include <unordered_map>
 
 #include "dsp/constants.hpp"
 #include "dsp/AudioModules/AudioModule.hpp"

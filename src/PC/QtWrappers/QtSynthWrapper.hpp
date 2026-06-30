@@ -9,6 +9,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
 #include <QQuickWindow>
+#include <QQmlContext>
 
 #include <dsp/dsp.hpp>
 #include <QtWrappers.hpp>
@@ -24,14 +25,21 @@ private:
     QQmlApplicationEngine   &appEngine_;
     QVariantList            qtAudioModules_;
 
+    void                    insertQmlModule(QString moduleUrl, QObject *moduleWrapper);
+
 public:
     explicit                QtSynthWrapper(Synth &synth, QQmlApplicationEngine &appEngine, QObject *parent = nullptr);
 
     bool                    eventFilter(QObject *obj, QEvent *event) override;
 
-    QtSynthWrapper          &setGate(bool state);
-    Synth                   &getSynth() { return this->synth_; };
-    QVariantList            &getAudioModules() { return this->qtAudioModules_; };
+    enum class e_audioModulesQt { VCO, VCA, ENV, MIXER_4 };
+    Q_ENUM(e_audioModulesQt);
+
+    Synth                   &getSynth() { return synth_; };
+    QVariantList            &getAudioModules() { return qtAudioModules_; };
+    QtSynthWrapper          &setGate(bool state); // to move in keyboard module
+
+    Q_INVOKABLE void        addAudioModule(e_audioModulesQt type) { synth_.addAudioModule(static_cast<e_audioModules>(type)); };
 
 signals:
     void                    gateChanged();
@@ -39,4 +47,5 @@ signals:
 
 private slots:
     void                    onAudioModuleCreated(AudioModule *newModule, e_audioModules type);
+    void                    onConnectionRequest(float &from, float &to) { synth_.connect(from, to); };
 };

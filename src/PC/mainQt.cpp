@@ -24,12 +24,12 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
     Synth *self = static_cast<Synth *>(userData);
     std::weak_ptr<Mixer_4> mixer = self->getMaster();
     for (unsigned int i = 0; i < nBufferFrames; i++) {
-        // self->incTotalSamples();
+       // self->incTotalSamples();
         self->render();
-        // std::cout << mixer.lock()->getOutput() << std::endl;
-        *outBuffer++ = mixer.lock()->audioOutput;
-        // std::cout << "=======\n";
-        // std::cout << *(outBuffer - 1) << std::endl;
+        if (!mixer.lock())
+            mixer = self->getMaster();
+        else
+            *outBuffer++ = mixer.lock()->audioOutput;
     }
     return (0);
 }
@@ -51,24 +51,32 @@ int main(int argc, char *argv[])
     QtSynthWrapper synthWrapper(synth, engine);
     app.installEventFilter(&synthWrapper);
 
+    engine.rootContext()->setContextProperty("synth", &synthWrapper);
+
+    qmlRegisterUncreatableType<QtSynthWrapper>(
+        "MyModule", 1, 0,
+        "QtSynthWrapper",
+        "Enum access only, instance is provided via context property"
+        );
+
     engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/ui/Main.qml")));
 
-    std::shared_ptr<AudioModule> osc = synth.addAudioModule(VCO);
-    std::shared_ptr<AudioModule> osc2 = synth.addAudioModule(VCO);
-    std::shared_ptr<AudioModule> vca = synth.addAudioModule(VCA);
-    std::shared_ptr<AudioModule> mixer = synth.addAudioModule(MIXER_4);
-    std::shared_ptr<AudioModule> env = synth.addAudioModule(ENV);
+    // std::shared_ptr<AudioModule> osc = synth.addAudioModule(VCO);
+    // std::shared_ptr<AudioModule> osc2 = synth.addAudioModule(VCO);
+    // std::shared_ptr<AudioModule> vca = synth.addAudioModule(VCA);
+    // std::shared_ptr<AudioModule> mixer = synth.addAudioModule(MIXER_4);
+    // std::shared_ptr<AudioModule> env = synth.addAudioModule(ENV);
 
-    Vco *vcoptr = dynamic_cast<Vco*>(osc.get());
-    Vco *vco2ptr = dynamic_cast<Vco*>(osc2.get());
-    Vca *vcaptr = dynamic_cast<Vca*>(vca.get());
-    Mixer_4 *mixerptr = dynamic_cast<Mixer_4 *>(mixer.get());
-    Env* envptr = dynamic_cast<Env *>(env.get());
+    // Vco *vcoptr = dynamic_cast<Vco*>(osc.get());
+    // Vco *vco2ptr = dynamic_cast<Vco*>(osc2.get());
+    // Vca *vcaptr = dynamic_cast<Vca*>(vca.get());
+    // Mixer_4 *mixerptr = dynamic_cast<Mixer_4 *>(mixer.get());
+    // Env* envptr = dynamic_cast<Env *>(env.get());
 
-    synth.connect(vcoptr->audioOutput, vcaptr->audioInput);
-    synth.connect(vco2ptr->audioOutput, vcaptr->audioInput);
-    synth.connect(vcaptr->audioOutput, mixerptr->audioInputs[0]);
-    synth.connect(envptr->cvOut, vcaptr->CV_in);
+    // synth.connect(vcoptr->audioOutput, vcaptr->audioInput);
+    // synth.connect(vco2ptr->audioOutput, vcaptr->audioInput);
+    // synth.connect(vcaptr->audioOutput, mixerptr->audioInputs[0]);
+    // synth.connect(envptr->cvOut, vcaptr->CV_in);
 
     std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getAudioModules();
 
@@ -99,6 +107,7 @@ int main(int argc, char *argv[])
                   << audio.getErrorText() << '\n'
                   << std::endl;
     }
+
 
     // QtVcoWrapper oscWrapper(dynamic_cast<Vco *>(osc.get())); // /!\ -> twice, as there is already one created in QSynthWrapper
     // QtVcoWrapper oscWrapper2(dynamic_cast<Vco *>(osc2.get()));

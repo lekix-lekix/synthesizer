@@ -4,6 +4,7 @@ Item {
     id: container
     property string label: ""
     property var engine: null
+    property string port: ""
 
     implicitWidth: jack.width
     implicitHeight: textItem.height + spacing + jack.height
@@ -38,7 +39,7 @@ Item {
             height: jack.height
             visible: true
             Drag.active: mouseArea.drag.active
-            Drag.source: engine
+            Drag.source: container
             Drag.keys: []
             Drag.hotSpot.x: width / 2
             Drag.hotSpot.y: height / 2
@@ -73,7 +74,7 @@ Item {
             id: dropArea
             anchors.fill: parent
             keys: []
-            onEntered: function(drag) { console.log("survolé par", drag.source) }
+            onEntered: function(drag) { console.log("survolé par", drag.source.port) }
             onExited: { console.log("plus survolé") }
             onDropped: function(drop) {
                 console.log("a reçu un drop de", drop.source);

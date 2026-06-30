@@ -3,8 +3,8 @@
 class Patch
 {
     private:
-        float &to_;
         float &from_;
+        float &to_;
 
     public:
         Patch() = delete;

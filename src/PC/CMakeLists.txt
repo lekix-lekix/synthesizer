@@ -23,6 +23,7 @@ qt_add_qml_module(synth_pcbuild
         ui/VSlider.qml
         ui/Mixer4.qml
         SOURCES Patch.hpp
+        QML_FILES ui/ModulesMenu.qml
 )
 
 add_subdirectory(QtWrappers)

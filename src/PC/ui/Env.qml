@@ -5,6 +5,8 @@ import QtQuick.Effects
 Item {
     property var engine: null; // -> access to c++ qt wrapper
 
+    anchors.centerIn: parent;
+
     Rectangle {
         id: env
         width: 150

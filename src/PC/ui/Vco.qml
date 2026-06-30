@@ -3,14 +3,15 @@ import QtQuick.Layouts
 import QtQuick.Effects
 
 Item {
+    id: rootItem
     property var engine: null; // -> access to c++ qt wrapper
+
+    anchors.centerIn: parent
 
     Rectangle {
         id: vco
         width: 150
         height: 500
-        // width: 100;
-        // height: 200;
         radius: 10
         border.color: "black"
         border.width: 2
@@ -72,13 +73,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: -parent.height * 0.1
-
-            // Text {
-            //     text: "FREQ"
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     anchors.top: parent.top
-            //     anchors.topMargin: 8
-            // }
 
             Rectangle {
                 id: freqButton
@@ -258,12 +252,12 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
-            // border.color: "black"
-            // border.width: 2;
 
             Jack {
                 label: "OUT"
+                port: "audioOutput"
                 anchors.left: parent.left
+                engine: rootItem.engine
                 // anchors.leftMargin: parent.width / 4
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -278,7 +272,9 @@ Item {
 
             Jack {
                 label: "CV"
+                port: "freqCVIn"
                 anchors.right: parent.right;
+                engine: rootItem.engine
                 // anchors.rightMargin: parent.width / 4
                 anchors.verticalCenter: parent.verticalCenter
                 // anchors.margins: 6;
