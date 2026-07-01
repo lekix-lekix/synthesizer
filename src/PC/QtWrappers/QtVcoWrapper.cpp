@@ -1,8 +1,11 @@
 #include "QtVcoWrapper.hpp"
 
 QtVcoWrapper::QtVcoWrapper(Vco *vco, QObject *parent)
-    : vco_(vco), QObject{parent}
-{}
+    : QtModuleWrapper(parent), vco_(vco)
+{
+    ports_.emplace("audioOutput", std::ref(vco_->audioOutput));
+    ports_.emplace("freqCVIn", std::ref(vco_->freqCVIn));
+}
 
 QString QtVcoWrapper::getWaveQstr() {
     e_wave &waveType = getWave();

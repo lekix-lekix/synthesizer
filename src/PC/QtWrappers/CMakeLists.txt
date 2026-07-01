@@ -5,6 +5,10 @@ add_library(wrappers STATIC
     QtVcaWrapper.cpp
     QtMixer4Wrapper.cpp
     QtWrappers.hpp
+
+    QtModuleWrapper.cpp
+    QtModuleWrapper.hpp QtModuleWrapper.cpp
+
 )
 
 target_sources(wrappers PRIVATE

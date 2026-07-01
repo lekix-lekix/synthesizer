@@ -13,6 +13,6 @@
 #include "Vca.hpp"
 
 void Vca::render() {
-    this->audioOutput = this->audioInput * (this->gain * (this->CV_in / 10.0f));
+    this->audioOutput = this->audioInput * (gain_ * (this->gainCVIn / 10.0f));
     incTotalSamplesElapsed();
 }

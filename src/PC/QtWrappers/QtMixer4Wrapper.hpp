@@ -3,8 +3,9 @@
 #include <QObject>
 
 #include <dsp/dsp.hpp>
+#include <QtModuleWrapper.hpp>
 
-class QtMixer4Wrapper : public QObject
+class QtMixer4Wrapper : public QtModuleWrapper
 {
     Q_OBJECT
     Q_PROPERTY(float gain0 READ getGain0 WRITE setGain0 NOTIFY onGain0Changed)

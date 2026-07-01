@@ -47,5 +47,7 @@ signals:
 
 private slots:
     void                    onAudioModuleCreated(AudioModule *newModule, e_audioModules type);
-    void                    onConnectionRequest(float &from, float &to) { synth_.connect(from, to); };
+    void                    onConnectionRequest(float &from, float &to) {
+        std::cout << "Connection request in synthwrapper" << std::endl;
+        synth_.connect(from, to); };
 };

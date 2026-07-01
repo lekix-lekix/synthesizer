@@ -24,6 +24,7 @@ qt_add_qml_module(synth_pcbuild
         ui/Mixer4.qml
         SOURCES Patch.hpp
         QML_FILES ui/ModulesMenu.qml
+        QML_FILES ui/cables.js
 )
 
 add_subdirectory(QtWrappers)

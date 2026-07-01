@@ -45,19 +45,12 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    // engine.loadFromModule("synth", "Main");
 
     Synth synth;
     QtSynthWrapper synthWrapper(synth, engine);
     app.installEventFilter(&synthWrapper);
 
     engine.rootContext()->setContextProperty("synth", &synthWrapper);
-
-    qmlRegisterUncreatableType<QtSynthWrapper>(
-        "MyModule", 1, 0,
-        "QtSynthWrapper",
-        "Enum access only, instance is provided via context property"
-        );
 
     engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/ui/Main.qml")));
 

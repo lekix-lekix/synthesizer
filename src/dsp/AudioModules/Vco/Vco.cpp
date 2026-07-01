@@ -16,7 +16,6 @@ constexpr float PI      = 3.14159;
 constexpr float TWO_PI  = 2.0f * PI;
 
 void Vco::render() {
-    // std::cout << "Vco CALLED\n";
     phase_ += TWO_PI * this->freq / SAMPLE_RATE;
     if (phase_ >= TWO_PI) phase_ -= TWO_PI;
     

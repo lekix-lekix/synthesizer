@@ -1,4 +1,5 @@
 import QtQuick
+import "cables.js" as Cable
 
 Item {
     id: container
@@ -71,15 +72,28 @@ Item {
         }
 
         DropArea {
+            property var cables: container.parent.parent.parent.parent.cables
+            property var canvas: container.parent.parent.parent.parent.canvas
+
             id: dropArea
             anchors.fill: parent
             keys: []
             onEntered: function(drag) { console.log("survolé par", drag.source.port) }
             onExited: { console.log("plus survolé") }
             onDropped: function(drop) {
-                console.log("a reçu un drop de", drop.source);
-                console.log(engine);
-                drop.source.print();
+                console.log(drop.source.children);
+                const source = drop.source.children[1];
+                const target = container.children[1];
+                // console.log("a reçu un drop de", drop.source.engine);
+                const sourcePos = source.mapToItem(canvas, source.width / 2, source.height / 2);
+                const targetPos = target.mapToItem(canvas, target.width / 2, target.height / 2);
+                cables.push(new Cable.Cable(sourcePos.x, sourcePos.y, targetPos.x, targetPos.y, "black"));
+                engine.connectionRequest(
+                    drop.source.engine,
+                    drop.source.port,
+                    engine,
+                    port
+                );
                 drop.accept();
             }
         }

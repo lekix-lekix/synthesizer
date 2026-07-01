@@ -53,6 +53,7 @@ std::unique_ptr<Patch> Synth::connect(float &from, float &to) {
     std::unique_ptr<Patch> newPatch = std::make_unique<Patch>(from, to);
     if (newPatch == nullptr) return nullptr;
     connections_.push_back(std::move(newPatch));
+    std::cout << "connected !" << std::endl;
     return newPatch;
 }
 

@@ -3,7 +3,10 @@ import QtQuick.Layouts
 import QtQuick.Effects
 
 Item {
+    id: rootItem
     property var engine: null; // -> access to c++ qt wrapper
+
+    anchors.centerIn: parent
 
     Rectangle {
         id: vca
@@ -83,11 +86,6 @@ Item {
 
                 property real value: 0.5           // 0.0 à 1.0
 
-                // Affiche la fréquence lisiblement
-                // property string freqLabel: freq < 1000
-                //     ? Math.round(freq) + " Hz"
-                //     : (freq / 1000).toFixed(2) + " kHz"
-
                 Rectangle {
                     id: barre
                     width: 3
@@ -136,13 +134,6 @@ Item {
             }
         }
 
-        // Text {
-        //     text: gainButton.freqLabel
-        //     anchors.horizontalCenter: parent.horizontalCenter
-        //     anchors.verticalCenter: parent.verticalCenter;
-        //     anchors.verticalCenterOffset: 20
-        // }
-
         Rectangle {
             id: connectors;
             width: parent.width * 0.75;
@@ -155,16 +146,11 @@ Item {
             border.color: "black";
 
             Jack {
-                label: "CV 1";
+                label: "CV IN";
+                engine: rootItem.engine
+                port: "gainCVIn"
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: 6
-            }
-
-            Jack {
-                label: "CV 2"
-                anchors.top: parent.top
-                anchors.right: parent.right
                 anchors.margins: 6
             }
 
@@ -179,6 +165,8 @@ Item {
 
             Jack {
                 label: "IN"
+                engine: rootItem.engine
+                port: "audioInput"
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.margins: 6
@@ -186,6 +174,8 @@ Item {
 
             Jack {
                 label: "OUT"
+                engine: rootItem.engine
+                port: "audioOutput"
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 6

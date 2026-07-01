@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include "QtModuleWrapper.hpp"
 #include "QtEnvWrapper.hpp"
 #include "QtMixer4Wrapper.hpp"
 #include "QtVcaWrapper.hpp"

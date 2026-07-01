@@ -45,7 +45,6 @@ bool QtSynthWrapper::eventFilter(QObject *obj, QEvent *event) { // to move into 
             case Qt::Key_A: this->setGate(false); return true;
         }
     }
-
     return QObject::eventFilter(obj, event); // ← important : passer les autres événements
 }
 
@@ -128,6 +127,10 @@ void QtSynthWrapper::insertQmlModule(QString moduleUrl, QObject *moduleWrapper) 
         std::cerr << moduleUrl.toStdString() << " root object is not a QQuickItem" << std::endl;
         return;
     }
-
     item->setParentItem(mainContainer);
+    auto *mw = qobject_cast<QtModuleWrapper *>(moduleWrapper);
+    if (mw) {
+        std::cout << "init connect" << std::endl;
+        QObject::connect(mw, &QtModuleWrapper::connectionRequestSignal, this, &QtSynthWrapper::onConnectionRequest);
+    }
 }

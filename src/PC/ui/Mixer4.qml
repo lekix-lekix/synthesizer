@@ -156,11 +156,33 @@ Item {
             anchors.bottomMargin: 10
 
             Jack {
-                label: "GATE"
+                label: "Input 1"
+                port: "audioInput0"
                 anchors.left: parent.left
                 anchors.margins: 6;
                 engine: root.engine
             }
+            // Jack {
+            //     label: "GATE"
+            //     port: "audioInput1"
+            //     anchors.left: parent.left
+            //     anchors.margins: 6;
+            //     engine: root.engine
+            // }
+            // Jack {
+            //     label: "GATE"
+            //     port: "audioInput2"
+            //     anchors.left: parent.left
+            //     anchors.margins: 6;
+            //     engine: root.engine
+            // }
+            // Jack {
+            //     label: "GATE"
+            //     port: "audioInput3"
+            //     anchors.left: parent.left
+            //     anchors.margins: 6;
+            //     engine: root.engine
+            // }
 
             Rectangle {
                 height: parent.height;

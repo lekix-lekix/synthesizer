@@ -1,11 +1,11 @@
 #pragma once
 
 #include <QObject>
-#include <unordered_map>
 
 #include <dsp/dsp.hpp>
+#include <QtWrappers.hpp>
 
-class QtVcoWrapper : public QObject
+class QtVcoWrapper : public QtModuleWrapper
 {
     Q_OBJECT
     Q_PROPERTY(float freq READ getFreq WRITE setFreq NOTIFY freqChanged);
@@ -24,16 +24,7 @@ public:
     QString             getWaveQstr();
     Q_INVOKABLE void    toggleWave() { vco_->toggleWave(); emit waveChanged(); };
 
-    std::unordered_map<std::string, float *> ports = {
-        {"audioOutput", &vco_->audioOutput},
-        {"freqCVIn", &vco_->freqCVIn}
-    };
-
-    // float               &getPort(std::string port) { return ports[port].second; };
-    void                connectionRequest(float &from, float &to) { emit connectionRequestSignal(from, to); };
-
 signals:
     void                freqChanged();
     void                waveChanged();
-    void                connectionRequestSignal(float &from, float &to);
 };

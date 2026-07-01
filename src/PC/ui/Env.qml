@@ -3,7 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Effects
 
 Item {
-    property var engine: null; // -> access to c++ qt wrapper
+    id: rootItem
+    property var engine: null; // -> access to c++ qtModule wrappe  r
 
     anchors.centerIn: parent;
 
@@ -78,10 +79,10 @@ Item {
                         VSlider {
                             from: 0
                             to: 1000;
-                            value: {engine ? engine.attack : 0}
+                            value: {engine ? engine.getAttack() : 0}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.attack = value}
+                            onValueChanged: {if (engine) engine.setAttack(value)}
                         }
 
                         Text {
@@ -97,10 +98,10 @@ Item {
                         VSlider {
                             from: 0
                             to: 2000;
-                            value: {engine ? engine.decay : 0}
+                            value: {engine ? engine.getDecay() : 0}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.decay = value}
+                            onValueChanged: {if (engine) engine.setDecay(value)}
                         }
 
                         Text {
@@ -116,10 +117,10 @@ Item {
                         VSlider {
                             from: 0
                             to: 1;
-                            value: {engine ? engine.sustain : 0}
+                            value: {engine ? engine.getSustain() : 0}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.sustain = value}
+                            onValueChanged: { if (engine) engine.setSustain(value)}
                         }
 
                         Text {
@@ -135,10 +136,10 @@ Item {
                         VSlider {
                             from: 0
                             to: 2000;
-                            value: {engine ? engine.release : 0}
+                            value: {engine ? engine.getRelease() : 0}
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.release = value }
+                            onValueChanged: {if (engine) engine.setRelease(value)}
                         }
                         Text {
                             text: "R";
@@ -157,7 +158,8 @@ Item {
             anchors.bottomMargin: 10
 
             Jack {
-                label: "GATE"
+                label: "GATE" // -> add gateIn
+                engine: rootItem.engine
                 anchors.left: parent.left
                 anchors.margins: 6;
             }
@@ -172,6 +174,8 @@ Item {
 
             Jack {
                 label: "CV OUT"
+                engine: rootItem.engine
+                port: "cvOut"
                 anchors.right: parent.right;
                 anchors.margins: 6;
             }

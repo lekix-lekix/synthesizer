@@ -15,14 +15,19 @@
 #include "dsp/AudioModules/AudioModule.hpp"
 
 class Vca : public AudioModule {
+    private:
+        float   gain_ = { 1 };
+
     public:
         Vca() : AudioModule("Vca") {};
-        Vca(const float &gain) : AudioModule("Vca") { this->gain = std::move(gain); };
+        Vca(const float &gain) : AudioModule("Vca") { gain_ = std::move(gain); };
 
-        float   gain = { 1 };
         float   audioInput = { 0 };
         float   audioOutput = { 0 };
-        float   CV_in = { 0 };
+        float   gainCVIn = { 0 };
+
+        float   getGain() { return gain_; };
+        Vca     &setGain(float newGain) { gain_ = newGain; return *this; };
 
         void    render() override;
 };

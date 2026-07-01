@@ -2,8 +2,9 @@
 
 #include <QObject>
 #include <dsp/dsp.hpp>
+#include <QtModuleWrapper.hpp>
 
-class QtEnvWrapper : public QObject
+class QtEnvWrapper : public QtModuleWrapper
 {
     Q_OBJECT
     Q_PROPERTY(float attack  READ getAttack  WRITE setAttack  NOTIFY onAttackChanged);
@@ -15,23 +16,23 @@ private:
     Env *env_;
 
 public:
-    explicit        QtEnvWrapper(Env *env, QObject *parent = nullptr);
+    explicit            QtEnvWrapper(Env *env, QObject *parent = nullptr);
 
-    const ADSR      &getADSR() { return env_->getADSR(); };
+    const ADSR          &getADSR() { return env_->getADSR(); };
 
-    const float     &getAttack() { return env_->getAttack(); };
-    const float     &getDecay() { return env_->getDecay(); };
-    const float     &getSustain() { return env_->getSustain(); };
-    const float     &getRelease() { return env_->getDecay(); };
+    Q_INVOKABLE const float         getAttack() { return env_->getAttack(); };
+    Q_INVOKABLE const float         getDecay() { return env_->getDecay(); };
+    Q_INVOKABLE const float         getSustain() { return env_->getSustain(); };
+    Q_INVOKABLE const float         getRelease() { return env_->getDecay(); };
 
-    Env             &setAttack(float time_ms) { return env_->setAttack(time_ms); };
-    Env             &setDecay(float time_ms) { return env_->setDecay(time_ms); };
-    Env             &setSustain(float gain) { return env_->setSustain(gain); };
-    Env             &setRelease(float time_ms) { return env_->setRelease(time_ms); };
+    Q_INVOKABLE Env     &setAttack(float time_ms) { return env_->setAttack(time_ms); };
+    Q_INVOKABLE Env     &setDecay(float time_ms) { return env_->setDecay(time_ms); };
+    Q_INVOKABLE Env     &setSustain(float gain) { return env_->setSustain(gain); };
+    Q_INVOKABLE Env     &setRelease(float time_ms) { return env_->setRelease(time_ms); };
 
 signals:
-    void            onAttackChanged();
-    void            onDecayChanged();
-    void            onSustainChanged();
-    void            onReleaseChanged();
+    void                onAttackChanged();
+    void                onDecayChanged();
+    void                onSustainChanged();
+    void                onReleaseChanged();
 };
