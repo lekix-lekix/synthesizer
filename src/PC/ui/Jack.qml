@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import "cables.js" as Cable
 
 Item {
@@ -56,24 +57,63 @@ Item {
         }
 
         MouseArea {
+            property var cable: null;
+            property var cables: CablesSingleton.cables
+            property var canvas: CanvasSingleton.canvas
+
             id: mouseArea
             anchors.fill: parent
             drag.target: proxy
+
+            Timer {
+                id: cableDelayTimer
+                interval: 500
+                repeat: false
+
+                onTriggered: {
+                    mouseArea.cables.pop();
+                }
+            }
+
             onPressed: {
                 // Reparenter AVANT que drag.target ne commence à calculer quoi que ce soit
                 var pos = jack.mapToItem(container, 0, 0)
                 proxy.parent = container
                 proxy.x = pos.x
                 proxy.y = pos.y
+
+                const source = jack;
+                const target = proxy;
+                const sourcePos = source.mapToItem(null, source.width / 2, source.height / 2);
+                const targetPos = target.mapToItem(null, target.width / 2, target.height / 2);
+                const color = CablesSingleton.colors[Math.floor(Math.random() * CablesSingleton.colors.length)];
+                const cable = new Cable.Cable(
+                    sourcePos.x,
+                    sourcePos.y,
+                    targetPos.x,
+                    targetPos.y,
+                    source,
+                    target,
+                    color,
+                    cables.length
+                );
+                CablesSingleton.cables.push(cable);
             }
             onReleased: {
-                proxy.Drag.drop();
+                const res = proxy.Drag.drop();
+                // console.log(res);
+                if (!res) {
+                    cableDelayTimer.start();
+                    // cables.pop();
+                }
+            }
+            onPositionChanged: {
             }
         }
 
         DropArea {
-            property var cables: container.parent.parent.parent.parent.cables
-            property var canvas: container.parent.parent.parent.parent.canvas
+            property var cables: CablesSingleton.cables
+            property var canvas: CanvasSingleton.canvas
 
             id: dropArea
             anchors.fill: parent
@@ -81,13 +121,11 @@ Item {
             onEntered: function(drag) { console.log("survolé par", drag.source.port) }
             onExited: { console.log("plus survolé") }
             onDropped: function(drop) {
-                console.log(drop.source.children);
-                const source = drop.source.children[1];
-                const target = container.children[1];
-                // console.log("a reçu un drop de", drop.source.engine);
-                const sourcePos = source.mapToItem(canvas, source.width / 2, source.height / 2);
-                const targetPos = target.mapToItem(canvas, target.width / 2, target.height / 2);
-                cables.push(new Cable.Cable(sourcePos.x, sourcePos.y, targetPos.x, targetPos.y, "black"));
+                const source = drop.source.children[1]; // ---> source jack
+                const cable = Cable.findCable(cables, source);
+                console.log(cable);
+                if (cable)
+                    cable.target = container.children[1];
                 engine.connectionRequest(
                     drop.source.engine,
                     drop.source.port,

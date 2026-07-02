@@ -256,9 +256,8 @@ Item {
             Jack {
                 label: "OUT"
                 port: "audioOutput"
-                anchors.left: parent.left
+                anchors.right: parent.right
                 engine: rootItem.engine
-                // anchors.leftMargin: parent.width / 4
                 anchors.verticalCenter: parent.verticalCenter
             }
 
@@ -273,7 +272,7 @@ Item {
             Jack {
                 label: "CV"
                 port: "freqCVIn"
-                anchors.right: parent.right;
+                anchors.left: parent.left;
                 engine: rootItem.engine
                 // anchors.rightMargin: parent.width / 4
                 anchors.verticalCenter: parent.verticalCenter

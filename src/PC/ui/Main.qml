@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "cables.js" as Cables
+import "cables.js" as CablesJS
 
 Window {
     property int windowWidth: 1280
@@ -19,7 +19,6 @@ Window {
         anchors.fill: parent
 
         property var synth: null;
-        property var cables: [];
 
         Button {
             id: moduleButton
@@ -44,30 +43,30 @@ Window {
         id: cableCanvas
         width: rootWindow.windowWidth
         height: rootWindow.windowHeight
+
         property bool start: true;
+        property var cables: CablesSingleton.cables
+        property var canvas: CanvasSingleton.canvas
 
         onPaint: {
             const ctx = getContext("2d");
-            // if (cableCanvas.start === true) {
-                // Cables.buildCables(Cables.modules);
+            CanvasSingleton.ctx = ctx;
             cableCanvas.start = false;
-            // }
-            // Cables.cables.forEach((c, i) => {
-            //     const p1 = Cables.jackPos(Cables.modules[0], Cables.modules[0].jacks[i], 'right');
-            //     const p2 = Cables.jackPos(Cables.modules[1], Cables.modules[1].jacks[i], 'left');
-            //     c.pinEnd(0, p1.x, p1.y);
-            //     c.pinEnd(1, p2.x, p2.y);
-            //     c.update();
-            // });
             ctx.clearRect(0, 0, width, height);
-            mainContainer.cables.forEach(c => {
+            cables.forEach(c => {
+                const sourcePos = c.source.mapToItem(null, c.source.width / 2, c.source.height / 2);
+                const targetPos = c.target.mapToItem(null, c.target.width / 2, c.target.height / 2);
+                c.pinEnd(0, sourcePos.x, sourcePos.y);
+                c.pinEnd(1, targetPos.x, targetPos.y);
                 c.update();
                 c.draw(ctx)
             });
-            // console.log(mainContainer.cables);
-            // Cables.modules.forEach((m) => Cables.drawModule(m, ctx));
-
-            requestAnimationFrame(() => cableCanvas.requestPaint())
         }
+    }
+    Timer {
+        interval: 16
+        running: true
+        repeat: true
+        onTriggered: cableCanvas.requestPaint()
     }
 }

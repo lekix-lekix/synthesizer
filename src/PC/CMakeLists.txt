@@ -12,9 +12,18 @@ target_include_directories(synth_pcbuild PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+set(qml_singletons
+    ui/CablesSingleton.qml
+    ui/CanvasSingleton.qml
+)
+
+set_source_files_properties(${qml_singletons}
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(synth_pcbuild
     URI synth
     QML_FILES
+        ${qml_singletons}
         ui/Main.qml
         ui/Vco.qml
         ui/Vca.qml
@@ -22,9 +31,11 @@ qt_add_qml_module(synth_pcbuild
         ui/Env.qml
         ui/VSlider.qml
         ui/Mixer4.qml
-        SOURCES Patch.hpp
-        QML_FILES ui/ModulesMenu.qml
-        QML_FILES ui/cables.js
+        ui/ModulesMenu.qml
+        ui/CablesSingleton.qml
+        ui/cables.js
+    SOURCES Patch.hpp
+    # QML_FILES ui/CanvasSingleton.qml
 )
 
 add_subdirectory(QtWrappers)
