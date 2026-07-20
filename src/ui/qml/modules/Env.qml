@@ -1,0 +1,186 @@
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Effects
+
+Item {
+    id: rootItem
+    property var engine: null; // -> access to c++ qtModule wrappe  r
+
+    anchors.centerIn: parent;
+
+    Rectangle {
+        id: env
+        width: 150
+        height: 500
+        radius: 10
+        border.color: "black"
+        border.width: 2
+        anchors.centerIn: parent
+
+        Text {
+            id: title
+            text: "ENV"
+            font.pointSize: 24
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 20
+            z: 100;
+        }
+
+        MultiEffect {
+            source: env
+            anchors.fill: env
+
+            shadowEnabled: true
+            shadowBlur: 0.8
+            shadowVerticalOffset: 4
+            shadowHorizontalOffset: 2
+            shadowColor: "#30000000"
+        }
+
+        MouseArea {
+            anchors.fill: parent        // couvre tout le rectangle
+            pressAndHoldInterval: 100
+
+            property bool dragging: false
+            property real startX: 0
+            property real startY: 0
+
+            onPressAndHold: {
+                dragging = true
+                env.anchors.centerIn = undefined
+            }
+
+            onPositionChanged: function(mouse) {
+                if (dragging) {
+                    env.x += mouse.x - startX
+                    env.y += mouse.y - startY
+                }
+            }
+
+            onReleased: {
+                dragging = false
+            }
+        }
+
+        Rectangle {
+            width: parent.width * 0.5
+            height: parent.height * 0.30
+            anchors.centerIn: parent
+
+            RowLayout {
+                anchors.fill: parent
+                spacing: 5
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 5
+
+                        VSlider {
+                            from: 0
+                            to: 1;
+                            value: {engine ? engine.getAttack() : 0}
+                            Layout.fillHeight: true
+                            Layout.alignment: Qt.AlignHCenter
+                            onValueChanged: {if (engine) engine.setAttack(value)}
+                        }
+
+                        Text {
+                            text: "A";
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 5
+
+                        VSlider {
+                            from: 0
+                            to: 1;
+                            value: {engine ? engine.getDecay() : 0}
+                            Layout.fillHeight: true
+                            Layout.alignment: Qt.AlignHCenter
+                            onValueChanged: {if (engine) engine.setDecay(value)}
+                        }
+
+                        Text {
+                            text: "D";
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 5
+
+                        VSlider {
+                            from: 0
+                            to: 1;
+                            value: {engine ? engine.getSustain() : 0}
+                            Layout.fillHeight: true
+                            Layout.alignment: Qt.AlignHCenter
+                            onValueChanged: { if (engine) engine.setSustain(value)}
+                        }
+
+                        Text {
+                            text: "S";
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 5
+
+                        VSlider {
+                            from: 0
+                            to: 1;
+                            value: {engine ? engine.getRelease() : 0}
+                            Layout.fillHeight: true
+                            Layout.alignment: Qt.AlignHCenter
+                            onValueChanged: {if (engine) engine.setRelease(value)}
+                        }
+                        Text {
+                            text: "R";
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
+                }
+            }
+
+        Rectangle {
+            id: connectors
+            width: parent.width * 0.75
+            height: parent.height / 8
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+
+            Jack {
+                label: "GATE" // -> add gateIn
+                labelPos: "top"
+                engine: rootItem.engine
+                anchors.left: parent.left
+                anchors.margins: 6;
+            }
+
+            Rectangle {
+                height: parent.height;
+                width: 1;
+                border.color: "black";
+                border.width: 1;
+                anchors.horizontalCenter: parent.horizontalCenter;
+            }
+
+            Jack {
+                label: "CV OUT"
+                labelPos: "top"
+                engine: rootItem.engine
+                port: "cvOut"
+                anchors.right: parent.right;
+                anchors.margins: 6;
+            }
+        }
+    }
+}

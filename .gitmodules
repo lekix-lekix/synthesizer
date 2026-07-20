@@ -1,3 +1,6 @@
 [submodule "rtaudio"]
 	path = rtaudio
 	url = https://github.com/thestk/rtaudio.git
+[submodule "dsp_library"]
+	path = dsp_library
+	url = https://github.com/lekix-lekix/dsp_library

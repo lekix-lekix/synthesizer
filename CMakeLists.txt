@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 project(synth)
 
-add_subdirectory(src/dsp)
-add_subdirectory(src/PC)
+add_subdirectory(dsp_library)
+add_subdirectory(src)
