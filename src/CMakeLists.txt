@@ -32,6 +32,7 @@ set(qml_modules
     ui/qml/modules/VSlider.qml
     ui/qml/modules/Mixer4.qml
     ui/qml/modules/ModulesMenu.qml
+    ui/qml/modules/Knob.qml
 )
 
 set(js_files
@@ -42,6 +43,7 @@ set_source_files_properties(${qml_singletons}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(synth_pcbuild
+    VERSION 1.0
     URI synth
     QML_FILES
         ${qml_singletons}
@@ -52,7 +54,7 @@ qt_add_qml_module(synth_pcbuild
         Patch.hpp
         ui/InputHandler.hpp
         ui/InputHandler.cpp
-        QML_FILES ui/qml/modules/Knob.qml
+        # ui/qml/modules/Knob.qml
 )
 
 add_subdirectory(QtWrappers)

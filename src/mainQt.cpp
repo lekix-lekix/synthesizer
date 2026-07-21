@@ -4,6 +4,7 @@
 #include "Synth.hpp"
 #include "../rtaudio/RtAudio.h"
 #include "QtWrappers.hpp"
+#include <qdiriterator.h>
 #include <ui/InputHandler.hpp>
 #include <dsp_library/dsp.hpp>
 
@@ -18,8 +19,9 @@ int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFra
     double *outBuffer = (double *)outputBuffer;
     Synth *self = static_cast<Synth *>(userData);
     std::weak_ptr<Mixer_4> mixer = self->getMaster();
-    for (unsigned int i = 0; i < nBufferFrames; i++) {
-       // self->incTotalSamples();
+    for (unsigned int i = 0; i < nBufferFrames; i++)
+    {
+        // self->incTotalSamples();
         // self->inRendering.store(true);
         self->render();
         if (!mixer.lock())
@@ -41,7 +43,8 @@ int main(int argc, char *argv[])
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
         &app,
-        []() { QCoreApplication::exit(-1); },
+        []()
+        { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
     Synth synth;
@@ -54,11 +57,10 @@ int main(int argc, char *argv[])
     engine.addImportPath("qrc:/qt/qml/synth/ui/qml/modules");
 
     app.installEventFilter(&inputHandler);
-    // qmlRegisterSingletonInstance("synth", 1, 0, "InputHandler", &inputHandler);
-
     engine.rootContext()->setContextProperty("synth", &synthWrapper);
-
+    // engine.load(QUrl(QStringLiteral("qrc:/synth/ui/qml/Main.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/ui/qml/Main.qml")));
+    // engine.loadFromModule("synth", "Main");
 
     std::vector<std::shared_ptr<AudioModule>> const &modules = synth.getAudioModules();
 

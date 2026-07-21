@@ -29,32 +29,34 @@
 class Synth
 {
     private:
-        std::vector<std::shared_ptr<AudioModule>>                                 audioModules_;
-        std::atomic<std::vector<std::unique_ptr<Patch>>*>                         connections_;
+        std::vector<std::shared_ptr<AudioModule>>                                   audioModules_;
+        std::atomic<std::vector<std::unique_ptr<Patch>>*>                           connections_;
 
-        std::shared_ptr<AudioModule>                makeAudioModule(e_audioModules type);
-        std::unique_ptr<Patch>                      makePatch(float *from, float *to);
+        std::shared_ptr<AudioModule>                                                makeAudioModule(e_audioModules type);
+        std::unique_ptr<Patch>                                                      makePatch(float *from, float *to);
         
     public:
         Synth() : connections_(new std::vector<std::unique_ptr<Patch>>()) {}
-        ~Synth() { delete connections_.load(); delete connections_; };
+        ~Synth() {
+            delete connections_.load();
+        };
         Synth(const Synth &other) = delete;
         Synth(Synth &&other) = delete;
         Synth &operator=(const Synth &other) = delete;
         Synth &operator=(Synth &&other) = delete;
         
-        std::shared_ptr<AudioModule>                addAudioModule(e_audioModules type);
-        std::unique_ptr<Patch>                      connect(float *from, float *to);
-        void                                        render();
+        std::shared_ptr<AudioModule>                                                addAudioModule(e_audioModules type);
+        std::unique_ptr<Patch>                                                      connect(float *from, float *to);
+        void                                                                        render();
 
-        std::atomic<bool>                           inRendering;
+        std::atomic<bool>                                                           inRendering;
 
         template<typename T>
-        T*                                          getModule(int idx); // -> a changer
-        std::vector<std::shared_ptr<AudioModule>>   &getAudioModules() { return this->audioModules_; };
-        std::vector<std::unique_ptr<Patch>>         &getConnections() { return *this->connections_.load(); };
-        void                                        deleteConnection(unsigned int index);
-        void                                        setInput(int input);
+        T*                                                                          getModule(int idx); // -> a changer
+        std::vector<std::shared_ptr<AudioModule>>                                   &getAudioModules() { return this->audioModules_; };
+        std::vector<std::unique_ptr<Patch>>                                         &getConnections() { return *this->connections_.load(); };
+        void                                                                        deleteConnection(unsigned int index);
+        void                                                                        setInput(int input);
 
         std::weak_ptr<Mixer_4> getMaster() {
             if (audioModules_.empty())
