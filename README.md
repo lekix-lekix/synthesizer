@@ -1,18 +1,58 @@
-# 🎛️ Modular Digital Synthesizer
+# 🎛️ Cutee Synth - A Modular Digital Synthesizer
 
-## Cross-platform modular digital synthesizer — PC & Embedded (Work in progress)
+![Cutee Synth screenshot](./Cutee%20Synth.png?raw=true "Cutee Synth")
 
 ### Overview
 
-A C++ modular synthesizer engine designed to run both on desktop (PC) and embedded hardware (Daisy Seed / STM32). The project aims to digitally replicate the behavior of classic analog modular synthesizer modules, with a focus on real-time audio processing and object-oriented programming.
+Cutee is a C++ modular synthesizer built on top of my [homemade DSP/synthesis library](https://github.com/lekix-lekix/dsp_library), using the Qt Framework for the UI and the RtAudio library.
+The project aims to digitally replicate the behavior of classic analog modular synthesizer modules, with a focus on real-time audio processing and object-oriented
+programming.
 
 ### Architecture
 
-The project is separated in three parts :
+As every realtime audio project, Cutee runs on a multithreaded architecture : one lock-free realtime audio thread that handles the audio loop (that must go fast and render under ~2.90ms to avoid audio glitches), and one UI thread that handles memory allocations, modulations, UI, etc.
 
-- A real-time cross-platform DSP library. It emulates physical modules : Voltage Controlled Oscillator (VCO), Voltage Controlled Amplificator (VCA), etc.
-- A PC layer that uses the DSP library and implements a full modular synthesizer (work in progress), featuring a graphical interface made with the Qt framework and a pure C++ backend.
-- An embedded layer (to come).
+A main Synth class handles the memory allocation, the connections and to render every module :
+
+```cpp
+class Synth
+{
+    private:
+        std::vector<std::shared_ptr<AudioModule>>                                 audioModules_;
+        std::atomic<std::vector<std::unique_ptr<Patch>>*>                         connections_;
+
+        std::shared_ptr<AudioModule>                makeAudioModule(e_audioModules type);
+        std::unique_ptr<Patch>                      makePatch(float *from, float *to);
+
+    public:
+        [...]
+
+        std::shared_ptr<AudioModule>                addAudioModule(e_audioModules type);
+        std::unique_ptr<Patch>                      connect(float *from, float *to);
+        void                                        render();
+}
+```
+
+Call synth->render on every frame and it will render each audio module it contains, and propagate values from one audio module to another.
+
+
+The project is designed around C++ QtWrappers classes around the DSP modules, that look like this :
+
+```cpp
+class QtVcoWrapper : public QtModuleWrapper
+{
+    Q_OBJECT
+    Q_PROPERTY(float freq READ getFreq WRITE setFreq NOTIFY freqChanged);
+    Q_PROPERTY(float freqCVInAmount READ getFreqCVInAmount WRITE setFreqCVInAmount NOTIFY freqCVInAmountChanged);
+    Q_PROPERTY(QString wave READ getWaveQstr NOTIFY waveChanged);
+
+private:
+    Vco *vco_;
+    [...]
+}
+```
+
+All theses classes are used as interface between the DSP modules and the UI. A knob gets turned in the front-end, the Qt wrapper class gets a notification and send it to the C++ backend.
 
 ### DSP Library
 

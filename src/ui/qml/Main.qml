@@ -12,7 +12,7 @@ Window {
     width: windowWidth
     height: windowHeight
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("Cutee Synth")
 
     Item {
         id: mainContainer
