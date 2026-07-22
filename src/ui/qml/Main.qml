@@ -14,6 +14,15 @@ Window {
     visible: true
     title: qsTr("Cutee Synth")
 
+    onWidthChanged: {
+        windowWidth = width;
+        cableCanvas.width = width;
+    }
+    onHeightChanged: {
+        windowHeight = height;
+        cableCanvas.height = height;
+    }
+
     Item {
         id: mainContainer
         objectName: "mainContainer"
@@ -68,25 +77,45 @@ Window {
 
     Canvas {
         id: cableCanvas
-        width: rootWindow.windowWidth
-        height: rootWindow.windowHeight
+        width: rootWindow.width
+        height: rootWindow.height
+        renderStrategy: Canvas.Cooperative
 
         property bool start: true;
         property var cables: CablesSingleton.cables
         property var canvas: CanvasSingleton.canvas
 
+        property int minX: 0;
+        property int maxX: 0;
+        property int minY: 0;
+        property int maxY: 0;
+
         onPaint: {
             const ctx = getContext("2d");
             CanvasSingleton.ctx = ctx;
             cableCanvas.start = false;
-            ctx.clearRect(0, 0, width, height);
-            cables.forEach(c => {
-                const sourcePos = c.source.mapToItem(null, c.source.width / 2, c.source.height / 2);
-                c.pinEnd(0, sourcePos.x, sourcePos.y);
-                const targetPos = c.target.mapToItem(null, c.target.width / 2, c.target.height / 2);
-                c.pinEnd(1, targetPos.x, targetPos.y);
-                c.update();
-                c.draw(ctx)
+            // const minx = cables.reduce((min, c) => (c.points[0] < min ? c.points[0] : min), c.);
+            if (cables.length) {
+                ctx.clearRect(0, 0, width, height);
+            }
+            cables.forEach(cable => {
+                if (cable.points[0].x < cableCanvas.minX || cableCanvas.minX === 0) minX = cable.points[0].x;
+                if (cable.points[cable.points.length - 1].x > cableCanvas.maxX || cableCanvas.maxX === 0) cableCanvas.maxX = cable.points[cable.points.length - 1].x;
+                if (cable.points[0].y < cableCanvas.minY || cableCanvas.minY === 0) cableCanvas.minY = cable.points[0].y;
+                if (cable.points[cable.points.length - 1].y < cableCanvas.maxY || cableCanvas.maxY === 0) cableCanvas.maxY = cable.points[cable.points.length - 1].y;
+
+                ctx.strokeStyle = "red";
+                ctx.beginPath(); // Start a new path
+                ctx.rect(minX, minY, maxX - minX, maxY - minY); // Add a rectangle to the current path
+                ctx.stroke(); // Render the path
+                console.log(minX, minY, maxX, maxY);
+
+                const sourcePos = cable.source.mapToItem(null, cable.source.width / 2, cable.source.height / 2);
+                cable.pinEnd(0, sourcePos.x, sourcePos.y);
+                const targetPos = cable.target.mapToItem(null, cable.target.width / 2, cable.target.height / 2);
+                cable.pinEnd(1, targetPos.x, targetPos.y);
+                cable.update();
+                cable.draw(ctx)
             });
         }
     }

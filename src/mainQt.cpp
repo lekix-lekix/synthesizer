@@ -83,21 +83,21 @@ int main(int argc, char *argv[])
     unsigned int sampleRate = SAMPLE_RATE;     // freq d'echantillonnage
     unsigned int bufferFrames = BUFFER_FRAMES; // sample frames
 
-    std::cout << bufferFrames << std::endl;
-    if (audio.openStream(&params, NULL, RTAUDIO_FLOAT64, sampleRate,
-                         &bufferFrames, audioCallback, (void *)&synth))
-    {
-        std::cerr << '\n'
-                  << audio.getErrorText() << '\n'
-                  << std::endl;
-    }
+    // std::cout << bufferFrames << std::endl;
+    // if (audio.openStream(&params, NULL, RTAUDIO_FLOAT64, sampleRate,
+    //                      &bufferFrames, audioCallback, (void *)&synth))
+    // {
+    //     std::cerr << '\n'
+    //               << audio.getErrorText() << '\n'
+    //               << std::endl;
+    // }
 
-    if (audio.startStream())
-    {
-        std::cerr << audio.getErrorText() << std::endl;
-        audio.closeStream();
-        return -1;
-    }
+    // if (audio.startStream())
+    // {
+    //     std::cerr << audio.getErrorText() << std::endl;
+    //     audio.closeStream();
+    //     return -1;
+    // }
 
     std::cout << "nb of modules : " << synth.getAudioModules().size() << std::endl;
 
