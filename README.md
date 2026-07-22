@@ -35,7 +35,7 @@ class Synth
 
 Call synth->render on every frame and it will render each audio module it contains, and propagate values from one audio module to another.
 
-The project is designed around C++ QtWrappers classes around the DSP modules, that look like this :
+The project is designed around C++ QtWrappers classes around the DSP modules that maps pararemeters to knobs and buttons on the UI, and look like this :
 
 ```cpp
 class QtVcoWrapper : public QtModuleWrapper
