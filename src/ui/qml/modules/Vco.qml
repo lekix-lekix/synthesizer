@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
+import synth 1.0
 
 Item {
     id: rootItem
@@ -32,6 +33,8 @@ Item {
         MouseArea {
             anchors.fill: parent        // couvre tout le rectangle
             pressAndHoldInterval: 100
+
+            cursorShape: CablesSingleton.currentCursor
 
             property bool dragging: false
             property real startX: 0
@@ -158,6 +161,14 @@ Item {
                     border.width: 2
 
                     MouseArea {
+                        hoverEnabled: true;
+                        cursorShape: CablesSingleton.currentCursor
+                        onEntered: { CablesSingleton.currentCursor = Qt.PointingHandCursor; }
+                        onExited: {
+                            if (!pressed)
+                                CablesSingleton.currentCursor = Qt.ArrowCursor;
+                        }
+
                         anchors.fill: parent   // ✅ OK
                         onClicked: engine.toggleWave()
                     }

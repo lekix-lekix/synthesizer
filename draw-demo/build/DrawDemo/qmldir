@@ -1,0 +1,4 @@
+module DrawDemo
+typeinfo drawdemo.qmltypes
+prefer :/DrawDemo/
+

@@ -1,10 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
+import synth 1.0
 
 Item {
     id: rootItem
-    property var engine: null; // -> access to c++ qtModule wrappe  r
+    property var engine: null; // -> access to c++ qtModule wrapper
 
     anchors.centerIn: parent;
 
@@ -41,6 +42,8 @@ Item {
         MouseArea {
             anchors.fill: parent        // couvre tout le rectangle
             pressAndHoldInterval: 100
+
+            cursorShape: CablesSingleton.currentCursor
 
             property bool dragging: false
             property real startX: 0

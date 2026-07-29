@@ -1,10 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
+import synth 1.0
 
 Item {
-    id: root
+    id: rootItem
     property var engine: null; // -> access to c++ qt wrapper
+
+    anchors.centerIn: parent;
 
     Rectangle {
         id: env
@@ -39,6 +42,8 @@ Item {
         MouseArea {
             anchors.fill: parent        // couvre tout le rectangle
             pressAndHoldInterval: 100
+
+            cursorShape: CablesSingleton.currentCursor
 
             property bool dragging: false
             property real startX: 0
@@ -160,10 +165,10 @@ Item {
                 columns: 4
                 columnSpacing: 10
 
-                Jack { Layout.fillWidth: true; engine: root.engine; port: "audioInput0"; label: "1" }
-                Jack { Layout.fillWidth: true; engine: root.engine; port: "audioInput1"; label: "2" }
-                Jack { Layout.fillWidth: true; engine: root.engine; port: "audioInput2"; label: "3" }
-                Jack { Layout.fillWidth: true; engine: root.engine; port: "audioInput3"; label: "4" }
+                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput0"; label: "1" }
+                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput1"; label: "2" }
+                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput2"; label: "3" }
+                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput3"; label: "4" }
             }
         }
     }

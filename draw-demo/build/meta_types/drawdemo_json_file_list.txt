@@ -1,0 +1,1 @@
+/home/lekix/Desktop/DEV/synthesizer/draw-demo/build/drawdemo_autogen/include/../EWIEGA46WW/moc_DrawArea.cpp.json

@@ -97,6 +97,7 @@ void QtSynthWrapper::insertQmlModule(QString moduleUrl, QObject *moduleWrapper) 
         std::cerr << moduleUrl.toStdString() << " root object is not a QQuickItem" << std::endl;
         return;
     }
+    std::cout << "main container " << mainContainer << std::endl;
     item->setParentItem(mainContainer);
     auto *mw = qobject_cast<QtModuleWrapper *>(moduleWrapper);
     if (mw) {

@@ -1,8 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Shapes
 import "../js/cables.js" as CablesJS
-import synth
+import synth 1.0
 
 Window {
     property int windowWidth: 1280
@@ -16,11 +17,11 @@ Window {
 
     onWidthChanged: {
         windowWidth = width;
-        cableCanvas.width = width;
+        canvas.width = width;
     }
     onHeightChanged: {
         windowHeight = height;
-        cableCanvas.height = height;
+        canvas.height = height;
     }
 
     Item {
@@ -29,6 +30,10 @@ Window {
         anchors.fill: parent
 
         property var synth: null;
+
+        HoverHandler {
+            cursorShape: CablesSingleton.currentCursor
+        }
 
         Button {
             id: moduleButton
@@ -75,48 +80,32 @@ Window {
         }
     }
 
-    Canvas {
-        id: cableCanvas
+    DrawArea {
+        id: canvas
         width: rootWindow.width
         height: rootWindow.height
-        renderStrategy: Canvas.Cooperative
+        anchors.fill: parent
+        anchors.margins: 10
 
-        property bool start: true;
         property var cables: CablesSingleton.cables
         property var canvas: CanvasSingleton.canvas
+        property int i: 0;
 
-        property int minX: 0;
-        property int maxX: 0;
-        property int minY: 0;
-        property int maxY: 0;
-
-        onPaint: {
-            const ctx = getContext("2d");
-            CanvasSingleton.ctx = ctx;
-            cableCanvas.start = false;
-            // const minx = cables.reduce((min, c) => (c.points[0] < min ? c.points[0] : min), c.);
-            if (cables.length) {
-                ctx.clearRect(0, 0, width, height);
-            }
+        function update() {
             cables.forEach(cable => {
-                if (cable.points[0].x < cableCanvas.minX || cableCanvas.minX === 0) minX = cable.points[0].x;
-                if (cable.points[cable.points.length - 1].x > cableCanvas.maxX || cableCanvas.maxX === 0) cableCanvas.maxX = cable.points[cable.points.length - 1].x;
-                if (cable.points[0].y < cableCanvas.minY || cableCanvas.minY === 0) cableCanvas.minY = cable.points[0].y;
-                if (cable.points[cable.points.length - 1].y < cableCanvas.maxY || cableCanvas.maxY === 0) cableCanvas.maxY = cable.points[cable.points.length - 1].y;
-
-                ctx.strokeStyle = "red";
-                ctx.beginPath(); // Start a new path
-                ctx.rect(minX, minY, maxX - minX, maxY - minY); // Add a rectangle to the current path
-                ctx.stroke(); // Render the path
-                console.log(minX, minY, maxX, maxY);
-
-                const sourcePos = cable.source.mapToItem(null, cable.source.width / 2, cable.source.height / 2);
+                if (!cable || !cable.source || !cable.target) {
+                    console.log("skipping invalid cable this frame");
+                    return; // just skips this one cable, forEach continues to the next
+                }
+                const sourcePos = cable.source.mapToItem(canvas, cable.source.width / 2, cable.source.height / 2);
+                // console.log(sourcePos);
                 cable.pinEnd(0, sourcePos.x, sourcePos.y);
-                const targetPos = cable.target.mapToItem(null, cable.target.width / 2, cable.target.height / 2);
+                const targetPos = cable.target.mapToItem(canvas, cable.target.width / 2, cable.target.height / 2);
+                // console.log(targetPos);
                 cable.pinEnd(1, targetPos.x, targetPos.y);
                 cable.update();
-                cable.draw(ctx)
             });
+            canvas.setCables(cables);
         }
     }
 
@@ -124,6 +113,6 @@ Window {
         interval: 16
         running: true
         repeat: true
-        onTriggered: cableCanvas.requestPaint()
+        onTriggered: { canvas.update(); }
     }
 }

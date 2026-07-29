@@ -1,4 +1,5 @@
 import QtQuick
+import synth 1.0
 
 Item {
     id: knobRoot
@@ -42,37 +43,37 @@ Item {
             }
 
             MouseArea {
+                cursorShape: CablesSingleton.currentCursor
+
+                hoverEnabled: true;
+                onPressed: { CablesSingleton.currentCursor = Qt.ClosedHandCursor; }
+                onEntered: { CablesSingleton.currentCursor = Qt.OpenHandCursor; }
+                onReleased: { CablesSingleton.currentCursor = Qt.ArrowCursor; }
+                onExited: {
+                    if (!pressed)
+                        CablesSingleton.currentCursor = Qt.ArrowCursor;
+                }
+
                 anchors.fill: parent
                 onPositionChanged: function(mouse) {
+                    if (!pressed) return;
                     const cx = knobButton.width / 2
                     const cy = knobButton.height / 2
                     const angle = Math.atan2(mouse.y - cy, mouse.x - cx)
                     let   degrees = angle * (180 / Math.PI) + 90
 
-                    // atan2 saute de +180 à -180 en bas
-                    // on ramène tout entre 0 et 360
                     if (degrees < 0) degrees = degrees + 360
-
-                    // maintenant :
-                    // 0° = 12h, 90° = 3h, 180° = 6h, 270° = 9h
-                    // zone valide : 0° à 135° (droite) et 225° à 360° (gauche)
-                    // zone morte : 135° à 225° (bas)
-
                     if (degrees > 135 && degrees < 225) {
-                        // dans la zone morte → bloque au plus proche
                         if (degrees < 180) {
                             knobRoot.value = 1.0   // colle à droite
                         } else {
                             knobRoot.value = 0.0   // colle à gauche
                         }
                     } else {
-                        // zone valide
                         if (degrees >= 225) degrees = degrees - 360  // -135° à 0°
-                        // degrees est maintenant entre -135 et +135
                         knobRoot.value = (degrees + 135) / 270
                     }
                     knobRoot.engine[knobRoot.targetProperty] = knobRoot.value;
-                    // console.log(param);
                 }
                 onDoubleClicked: {
                     knobRoot.engine[knobRoot.targetProperty] = 0.5;

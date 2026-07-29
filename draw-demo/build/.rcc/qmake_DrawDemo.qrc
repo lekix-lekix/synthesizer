@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/DrawDemo">
+    <file alias="qmldir">/home/lekix/Desktop/DEV/synthesizer/draw-demo/build/DrawDemo/qmldir</file>
+  </qresource>
+</RCC>
+

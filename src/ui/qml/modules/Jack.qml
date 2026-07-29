@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import "../../js/cables.js" as Cables
-import synth
+import synth 1.0
 
 Item {
     id: container
@@ -70,6 +70,16 @@ Item {
             anchors.fill: parent
             drag.target: proxy
 
+            cursorShape: CablesSingleton.currentCursor;
+            hoverEnabled: true;
+
+            onEntered: { CablesSingleton.currentCursor = Qt.OpenHandCursor; }
+            onExited:  {
+                if (!mouseArea.pressed) {
+                    CablesSingleton.currentCursor = Qt.ArrowCursor;
+                }
+            }
+
             Timer {
                 id: cableRemoveDelayTimer
                 interval: 500
@@ -85,6 +95,10 @@ Item {
             }
 
             onPressed: {
+                CablesSingleton.currentCursor = Qt.ClosedHandCursor;
+
+                console.log(CablesSingleton.currentCursor);
+
                 InputHandler.print();
                 // Reparenter AVANT que drag.target ne commence à calculer quoi que ce soit
                 var pos = jack.mapToItem(container, 0, 0)
@@ -108,6 +122,8 @@ Item {
             }
 
             onReleased: {
+                CablesSingleton.currentCursor = Qt.ArrowCursor;
+
                 const res = proxy.Drag.drop();
                 if (!res) { // delete cable
                     const cable = container.localCables[localCables.length - 1];
@@ -128,7 +144,6 @@ Item {
                     console.log("HEY");
                     cable.target = cable.source;
                     cableRemoveDelayTimer.start();
-
                 }
                 container.heldCable = null;
             }

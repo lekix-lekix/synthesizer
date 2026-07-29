@@ -1,0 +1,14 @@
+-rootPath
+/home/lekix/Desktop/DEV/synthesizer/draw-demo
+-cmake-output
+-output-file
+/home/lekix/Desktop/DEV/synthesizer/draw-demo/build/.qt_plugins/Qt6_QmlPlugins_Imports_drawdemo.cmake
+-importPath
+/home/lekix/Desktop/DEV/synthesizer/draw-demo/build/DrawDemo
+-importPath
+/home/lekix/Desktop/DEV/synthesizer/draw-demo/build
+-importPath
+/usr/lib/x86_64-linux-gnu/qt6/qml
+-qrcFiles
+/home/lekix/Desktop/DEV/synthesizer/draw-demo/build/.rcc/qmake_DrawDemo.qrc
+/home/lekix/Desktop/DEV/synthesizer/draw-demo/build/.rcc/drawdemo_raw_qml_0.qrc

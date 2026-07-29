@@ -2,8 +2,8 @@
 
 const GRAVITY = 0.5;       // force vers le bas appliquée à chaque point
 const DAMPING = 0.985;     // amortissement de la vitesse (évite l'emballement)
-const SEGMENTS = 10;       // nombre de segments du câble // 20
-const ITERATIONS = 7;     // nombre de passes de résolution des contraintes par frame
+const SEGMENTS = 20;       // nombre de segments du câble // 20
+const ITERATIONS = 14;     // nombre de passes de résolution des contraintes par frame
 // const SLACK = 1.18;        // mou du câble (1 = tendu, >1 = plus de pendage)
 const SLACK = 1.25;        // mou du câble (1 = tendu, >1 = plus de pendage)
 
