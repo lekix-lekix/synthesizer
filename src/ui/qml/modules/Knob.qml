@@ -47,7 +47,9 @@ Item {
 
                 hoverEnabled: true;
                 onPressed: { CablesSingleton.currentCursor = Qt.ClosedHandCursor; }
-                onEntered: { CablesSingleton.currentCursor = Qt.OpenHandCursor; }
+                onEntered: {
+                    if (!pressed)
+                        CablesSingleton.currentCursor = Qt.OpenHandCursor; }
                 onReleased: { CablesSingleton.currentCursor = Qt.ArrowCursor; }
                 onExited: {
                     if (!pressed)

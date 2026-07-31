@@ -6,8 +6,6 @@
 #include <QtWrappers.hpp>
 #include <cmath>
 
-#include <iostream>
-
 class QtVcoWrapper : public QtModuleWrapper
 {
     Q_OBJECT

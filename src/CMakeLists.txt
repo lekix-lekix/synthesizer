@@ -57,6 +57,7 @@ qt_add_qml_module(synth_pcbuild
         ui/InputHandler.cpp
         ui/DrawArea.hpp
         ui/DrawArea.cpp
+        SOURCES ui/World.hpp ui/World.cpp
 )
 
 add_subdirectory(QtWrappers)

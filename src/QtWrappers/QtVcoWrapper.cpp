@@ -8,14 +8,12 @@ QtVcoWrapper::QtVcoWrapper(Vco *vco, QObject *parent)
 {
     ports_.emplace("audioOutput", &vco_->audioOutput);
     ports_.emplace("freqCVIn", &vco_->freqCVIn);
-    // ports_.emplace("")
 }
 
 QtVcoWrapper &QtVcoWrapper::setFreq(float newFreq) {
     const float minFreq = DEFAULT_FREQ / std::pow(2, OCTAVES_SPAN);
     const float maxFreq = DEFAULT_FREQ * std::pow(2, OCTAVES_SPAN);
     const float freq = minFreq * std::pow(maxFreq / minFreq, newFreq);
-    std::cout << "freq = " << freq << std::endl;
     vco_->setFreq(freq);
     return *this;
 }

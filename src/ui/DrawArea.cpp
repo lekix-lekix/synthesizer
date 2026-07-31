@@ -1,6 +1,6 @@
 #include "DrawArea.hpp"
 // #include <qjsengine.h>
-#include <iostream>
+// #include <iostream>
 
 DrawArea::DrawArea(QQuickItem *parent) : QQuickPaintedItem(parent) {
     // GPU-resident FBO instead of CPU QImage -> avoids the upload memcpy
@@ -9,12 +9,52 @@ DrawArea::DrawArea(QQuickItem *parent) : QQuickPaintedItem(parent) {
     setAntialiasing(true);
 }
 
-void DrawArea::paint(QPainter *painter) {
-    painter->setRenderHint(QPainter::Antialiasing);
+void DrawArea::paintGrid(QPainter *painter) {
+    QWindowList windows = QGuiApplication::allWindows();
+    QWindow *window = windows.first();
+    int winWidth = window->width();
+    int winHeight = window->height();
+
     QPen pen;
 
-    static int i = 0;
+    pen.setColor(QColor(Qt::black));
+    pen.setWidth(2);
+    painter->setPen(pen);
 
+    QVector<QPoint> lines;
+    for (int x = 0; ; x++) {
+        QPoint beginLinePx;
+        QPoint endLinePx;
+        beginLinePx = World::instance().coordToPx(QPoint(x, 0));
+        endLinePx = World::instance().coordToPx(QPoint(x, winHeight));
+        if (beginLinePx.x() > winWidth || endLinePx.x() > winWidth)
+            break ;
+        lines.push_back(beginLinePx);
+        lines.push_back(endLinePx);
+    }
+    for (int y = 0; ; y++) {
+        QPoint beginLinePx;
+        QPoint endLinePx;
+        beginLinePx = World::instance().coordToPx(QPoint(0, y));
+        endLinePx = World::instance().coordToPx(QPoint(winWidth, y));
+        if (beginLinePx.y() > winHeight || endLinePx.y() > winHeight)
+            break ;
+        lines.push_back(beginLinePx);
+        lines.push_back(endLinePx);
+    }
+    painter->drawLines(lines);
+}
+
+void DrawArea::paint(QPainter *painter) {
+    painter->setRenderHint(QPainter::Antialiasing);
+
+    if (gridBool_ == true) {
+        paintGrid(painter);
+        update();
+        return ;
+    }
+
+    QPen pen;
     for (auto &c: cables_) {
         QVariantMap cableMap = c.toMap();
         QVariantList pointsVList = cableMap["points"].toList();
@@ -35,17 +75,17 @@ void DrawArea::paint(QPainter *painter) {
         pen.setWidth(2);
         passthrough(points, -1.6f, painter, &pen);
 
-        if (i == points.size() - 1)
-            i = 0;
+        // if (i == points.size() - 1)
+        //     i = 0;
 
-        pen.setColor(Qt::white);
-        QPainterPath path;
-        int x = points[i].x();
-        int y = points[i].y();
-        path.moveTo(x, y);
-        path.arcTo(QRectF(x, y, 10, 10), 0, 360);
-        painter->strokePath(path, pen);
-        i++;
+        // pen.setColor(Qt::white);
+        // QPainterPath path;
+        // int x = points[i].x();
+        // int y = points[i].y();
+        // path.moveTo(x, y);
+        // path.arcTo(QRectF(x, y, 10, 10), 0, 360);
+        // painter->strokePath(path, pen);
+        // i++;
     }
     update();
 }
@@ -77,29 +117,6 @@ void DrawArea::passthrough(std::vector<QPointF> &pts, float yOffset, QPainter *p
     painter->strokePath(path, *pen);
 }
 
-// DrawArea *DrawArea::setCables(const QVariantList &cables) {
 
-// }
 
-// void DrawArea::draw(const QVariantList &cables, QPainter *painter) {
 
-//     for (auto &c: cables) {
-//         QVariantMap cableMap = c.toMap();
-//         QVariantList pointsArr = cableMap["points"].toList();
-
-//         std::vector<QPointF> points;
-//         for (auto &p : pointsArr) {
-//             QVariantMap pointMap = p.toMap();
-//             int x = pointMap["x"].toInt();
-//             int y = pointMap["y"].toInt();
-//             points.push_back(QPointF(x, y));
-//             // std::cout << points[points.size() - 1].x() << std::endl;
-//         }
-
-//         this->passthrough(points, 5);
-//         // painter->
-//         // std::cout << map["id"].toInt() << std::endl;
-//         // passthrough(map);
-//     }
-
-// }

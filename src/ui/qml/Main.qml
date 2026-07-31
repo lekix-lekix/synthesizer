@@ -6,8 +6,8 @@ import "../js/cables.js" as CablesJS
 import synth 1.0
 
 Window {
-    property int windowWidth: 1280
-    property int windowHeight: 960
+    property int windowWidth: 1440
+    property int windowHeight: 1024
 
     id: rootWindow
     width: windowWidth
@@ -17,11 +17,11 @@ Window {
 
     onWidthChanged: {
         windowWidth = width;
-        canvas.width = width;
+        /*cableCanvas.width = */gridCanvas.width = width;
     }
     onHeightChanged: {
         windowHeight = height;
-        canvas.height = height;
+        /*cableCanvas.height = */gridCanvas.height = height;
     }
 
     Item {
@@ -81,15 +81,109 @@ Window {
     }
 
     DrawArea {
-        id: canvas
-        width: rootWindow.width
-        height: rootWindow.height
+        id: gridCanvas
+        width: rootWindow.windowWidth
+        height: rootWindow.windowHeight
         anchors.fill: parent
         anchors.margins: 10
+        z: -1;
+
+        // property var cables: CablesSingleton.cables
+        // property var canvas: CanvasSingleton.canvas
+        property int wheelAcc: 0;
+        property var gridPaint: {gridCanvas.setGridBool(true);};
+
+        MouseArea {
+            id: gridMouseArea
+            width: parent.width
+            height: parent.height
+
+            property int initPosX: 0;
+            property int initPosY: 0;
+            property bool initPos: false;
+            // Drag.active: mouseArea.drag.active
+
+            onPositionChanged: function(mouse) {
+                if (pressed) {
+                    if (initPos == false) {
+                        initPosX = mouse.x;
+                        initPosY = mouse.y;
+                        initPos = true;
+                    }
+                    gridCanvas.setPan({x: mouse.x, y: mouse.y}, {x: initPosX, y: initPosY});
+                }
+            }
+            onReleased: { initPos = false; }
+            onWheel: (event) => {
+                console.log(event.angleDelta.y);
+                gridCanvas.wheelAcc += event.angleDelta.y;
+                if (gridCanvas.wheelAcc > 120 || gridCanvas.wheelAcc < -120) {
+                    if (event.angleDelta.y < 0) gridCanvas.zoomOut();
+                    else gridCanvas.zoomIn();
+                    gridCanvas.wheelAcc = 0;
+                }
+            }
+        }
+
+        // function update() {
+        //     cables.forEach(cable => {
+        //         if (!cable || !cable.source || !cable.target) {
+        //             console.log("skipping invalid cable this frame");
+        //             return; // just skips this one cable, forEach continues to the next
+        //         }
+        //         const sourcePos = cable.source.mapToItem(canvas, cable.source.width / 2, cable.source.height / 2);
+        //         cable.pinEnd(0, sourcePos.x, sourcePos.y);
+        //         const targetPos = cable.target.mapToItem(canvas, cable.target.width / 2, cable.target.height / 2);
+        //         cable.pinEnd(1, targetPos.x, targetPos.y);
+        //         cable.update();
+        //     });
+        //     gridCanvas.setCables(cables);
+        // }
+    }
+
+    DrawArea {
+        id: cableCanvas
+        width: rootWindow.windowWidth
+        height: rootWindow.windowHeight
+        anchors.fill: parent
+        anchors.margins: 10
+        z: 0
 
         property var cables: CablesSingleton.cables
         property var canvas: CanvasSingleton.canvas
-        property int i: 0;
+        // property int wheelAcc: 0;
+
+        // MouseArea {
+        //     id: cableMouseArea
+        //     width: parent.width
+        //     height: parent.height
+
+        //     property int initPosX: 0;
+        //     property int initPosY: 0;
+        //     property bool initPos: false;
+        //     // Drag.active: mouseArea.drag.active
+
+        //     onPositionChanged: function(mouse) {
+        //         if (pressed) {
+        //             if (initPos == false) {
+        //                 initPosX = mouse.x;
+        //                 initPosY = mouse.y;
+        //                 initPos = true;
+        //             }
+        //             cableCanvas.setPan({x: mouse.x, y: mouse.y}, {x: initPosX, y: initPosY});
+        //         }
+        //     }
+        //     onReleased: { initPos = false; }
+        //     onWheel: (event) => {
+        //         console.log(event.angleDelta.y);
+        //         cableCanvas.wheelAcc += event.angleDelta.y;
+        //         if (cableCanvas.wheelAcc > 120 || cableCanvas.wheelAcc < -120) {
+        //             if (event.angleDelta.y < 0) cableCanvas.zoomOut();
+        //             else cableCanvas.zoomIn();
+        //             cableCanvas.wheelAcc = 0;
+        //         }
+        //     }
+        // }
 
         function update() {
             cables.forEach(cable => {
@@ -97,22 +191,24 @@ Window {
                     console.log("skipping invalid cable this frame");
                     return; // just skips this one cable, forEach continues to the next
                 }
-                const sourcePos = cable.source.mapToItem(canvas, cable.source.width / 2, cable.source.height / 2);
-                // console.log(sourcePos);
+                const sourcePos = cable.source.mapToItem(cableCanvas, cable.source.width / 2, cable.source.height / 2);
                 cable.pinEnd(0, sourcePos.x, sourcePos.y);
-                const targetPos = cable.target.mapToItem(canvas, cable.target.width / 2, cable.target.height / 2);
-                // console.log(targetPos);
+                const targetPos = cable.target.mapToItem(cableCanvas, cable.target.width / 2, cable.target.height / 2);
                 cable.pinEnd(1, targetPos.x, targetPos.y);
                 cable.update();
             });
-            canvas.setCables(cables);
+            cableCanvas.setCables(cables);
         }
     }
+
 
     Timer {
         interval: 16
         running: true
         repeat: true
-        onTriggered: { canvas.update(); }
+        onTriggered: {
+            gridCanvas.update();
+            cableCanvas.update();
+        }
     }
 }

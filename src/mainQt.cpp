@@ -12,6 +12,32 @@
 
 int main(int argc, char *argv[])
 {
+    // QGuiApplication app(argc, argv);
+
+    // QQmlApplicationEngine engine;
+    // QObject::connect(
+    //     &engine,
+    //     &QQmlApplicationEngine::objectCreationFailed,
+    //     &app,
+    //     []()
+    //     { QCoreApplication::exit(-1); },
+    //     Qt::QueuedConnection);
+
+    // Synth synth;
+
+    // InputHandler inputHandler(synth);
+    // InputHandler::setInstance(&inputHandler);
+
+    // QtSynthWrapper synthWrapper(synth, engine);
+
+    // engine.addImportPath("qrc:/qt/qml/synth/ui/qml/modules");
+    // engine.rootContext()->setContextProperty("synth", &synthWrapper);
+    // engine.load(QUrl(QStringLiteral("qrc:/qt/qml/synth/ui/qml/Main.qml")));
+
+    // if (audioBackendInit(&synth) == false) return -1;
+    // int ret = QGuiApplication::exec();
+    // audioBackendClose();
+
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

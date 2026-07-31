@@ -11,13 +11,38 @@ Item {
 
     Rectangle {
         id: vco
-        width: 150
-        height: 500
+        width: CablesSingleton.unit;
+        height: CablesSingleton.unit * 3;
         radius: 10
         border.color: "black"
         border.width: 2
         anchors.centerIn: parent
 
+        Rectangle {
+            id: shadow3d
+            z: vco.z - 1
+            width: parent.width
+            height: parent.height
+            anchors.centerIn: parent
+            anchors.horizontalCenterOffset: -5
+            anchors.verticalCenterOffset: 5
+
+            border.color: "black"
+            border.width: 1
+            radius: 10
+            color: "black"
+
+            MultiEffect {
+                source: shadow3d
+                anchors.fill: shadow3d
+
+                shadowEnabled: true
+                shadowBlur: 0.8
+                shadowVerticalOffset: 4
+                shadowHorizontalOffset: 2
+                shadowColor: "#30000000"
+            }
+        }
 
         MultiEffect {
             source: vco
@@ -54,6 +79,7 @@ Item {
 
             onReleased: {
                 dragging = false
+
             }
         }
 
@@ -151,7 +177,6 @@ Item {
                 }
                 Rectangle {
                     id: underButton
-
                     Layout.preferredWidth: parent.width * 0.50
                     Layout.preferredHeight: parent.height * 0.25
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
