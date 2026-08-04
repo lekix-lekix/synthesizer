@@ -33,6 +33,7 @@ set(qml_modules
     ui/qml/modules/Mixer4.qml
     ui/qml/modules/ModulesMenu.qml
     ui/qml/modules/Knob.qml
+    ui/qml/modules/Module.qml
 )
 
 set(js_files
@@ -57,7 +58,10 @@ qt_add_qml_module(synth_pcbuild
         ui/InputHandler.cpp
         ui/DrawArea.hpp
         ui/DrawArea.cpp
-        SOURCES ui/World.hpp ui/World.cpp
+        ui/World.hpp
+        ui/World.cpp
+        # QML_FILES
+        # SOURCES ui/Module.hpp ui/Module.cpp
 )
 
 add_subdirectory(QtWrappers)

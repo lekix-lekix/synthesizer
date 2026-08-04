@@ -74,14 +74,16 @@ void QtSynthWrapper::insertQmlModule(QString moduleUrl, QObject *moduleWrapper) 
     std::cerr << "moduleWrapper ptr: " << moduleWrapper << std::endl;
     initialProps["engine"] = QVariant::fromValue(moduleWrapper);
 
+    std::cout << "COUCOU" << std::endl;
     QObject *obj = component.createWithInitialProperties(initialProps, appEngine_.rootContext());
     if (!obj) {
         std::cerr << "Error while creating QtComponent: " << component.errorString().toStdString() << std::endl;
         return;
     }
+    std::cout << "END COUCOU" << std::endl;
 
     QList<QObject*> rootObjs = appEngine_.rootObjects();
-    std::cerr << "rootObjects count: " << rootObjs.size() << std::endl;
+    std::cerr << "rootObjects count count: " << rootObjs.size() << std::endl;
     if (rootObjs.isEmpty()) {
         std::cerr << "appEngine_ has no loaded QML! Wrong engine instance?" << std::endl;
         return;

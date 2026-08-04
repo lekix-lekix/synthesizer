@@ -1,19 +1,28 @@
 #include "World.hpp"
 #include <iostream>
 
-void World::calculateNewPan(QPointF mousePos, QPointF mouseInitPos) {
-    float diffX = mouseInitPos.x() - mousePos.x();
-    float diffY = mouseInitPos.y() - mousePos.y();
+void World::calculateNewPan(QPoint mousePos, QPoint mouseInitPos) {
+    QPointF mousePosCoord = pxToCoord(mousePos);
+    QPointF mouseInitPosCoord = pxToCoord(mouseInitPos);
 
-    QPointF coord = pxToCoord(QPoint(mousePos.x(), mousePos.y()));
-    std::cout << "coord : " << coord.x() << " " << coord.y() << std::endl;
+    QPointF coordDiff = QPointF(
+        (mousePosCoord.x() - mouseInitPosCoord.x()),
+        (mousePosCoord.y() - mouseInitPosCoord.y())
+    );
 
-    // QPointF mouseDiff = this->coordToPx(QPoint(diffX, diffY));
-    std::cout << "Init pos : " << mouseInitPos.x() << " " << mouseInitPos.y() << std::endl;
-    std::cout << "New pos : " << mousePos.x() << " " << mousePos.y() << std::endl;
-    std::cout << "diff : " << diffX << " " << diffY << std::endl;
-    // std::cout << mouseDiff.x() << " " << mouseDiff.y() << std::endl;
-    this->pan.setX((this->pan.x() + diffX) * 0.01);
-    this->pan.setY((this->pan.y() + diffY) * 0.01);
-    // this->pan.setX(this->pan.x() + 0.1);
+    float panX = this->pan.x() + coordDiff.x();
+    float panY = this->pan.y() + coordDiff.y();
+
+    this->setPan(QPointF(panX, panY));
+    emit panChanged();
+}
+
+Q_INVOKABLE QPoint World::coordToPx(QPoint coord) {
+    return QPoint((coord.x() + pan.x()) * gridSize * zoom,
+                  (coord.y() + pan.y()) * gridSize * zoom);
+}
+
+Q_INVOKABLE QPointF World::pxToCoord(QPoint px) {
+    return QPointF(px.x() / ((qreal)gridSize * zoom) - pan.x(),
+                   px.y() / ((qreal)gridSize * zoom) - pan.y());
 }

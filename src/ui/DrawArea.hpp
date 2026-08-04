@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QQuickPaintedItem>
+#include <QWindow>
 #include <QPainterPath>
 #include <QPainter>
 #include <QVector>
@@ -22,29 +23,21 @@ private:
     std::vector<QPointF>    getPointsFromVList(const QVariantList &points);
     QPoint                  coordToPx(QPoint coord);
 
-
 public:
-    World       *world;
+    explicit                DrawArea(QQuickItem *parent = nullptr);
 
-    explicit    DrawArea(QQuickItem *parent = nullptr);
+    void                    paint(QPainter *painter) override;
+    void                    passthrough(std::vector<QPointF> &points, float yOffset, QPainter *painter, QPen *pen);
 
-    void        paint(QPainter *painter) override;
-    void        passthrough(std::vector<QPointF> &points, float yOffset, QPainter *painter, QPen *pen);
+    void                    paintGrid(QPainter *painter);
 
-    Q_INVOKABLE DrawArea &setCables(const QVariantList &cables) { cables_ = cables; return *this; };
+    Q_INVOKABLE const DrawArea &setCables(const QVariantList &cables)   { cables_ = cables; return *this; };
+    Q_INVOKABLE const DrawArea &setGridBool(bool gridBool)              { gridBool_ = gridBool; return *this; };
 
-    Q_INVOKABLE World    &setPan(QVariantMap mousePos, QVariantMap mouseInitPos) {
-        World::instance().calculateNewPan(
-            QPointF(mousePos.value("x").toFloat(), mousePos.value("y").toFloat()),
-            QPointF(mouseInitPos.value("x").toFloat(), mouseInitPos.value("y").toFloat())
-        );
-        return *this->world;
+    Q_INVOKABLE void    setPan(QPoint mousePos, QPoint mouseInitPos) {
+        World::instance().calculateNewPan(mousePos, mouseInitPos);
     }
 
-    void paintGrid(QPainter *painter);
-
-    Q_INVOKABLE const DrawArea &setGridBool(bool gridBool) { gridBool_ = gridBool; return *this; };
-
-    Q_INVOKABLE void    zoomIn() { World::instance().zoom *= 1.1; };
-    Q_INVOKABLE void    zoomOut() { World::instance().zoom *= 0.9; };
+    // Q_INVOKABLE void zoomIn()  { World::instance().zoom *= 1.1; };
+    // Q_INVOKABLE void zoomOut() { World::instance().zoom *= 0.9; };
 };

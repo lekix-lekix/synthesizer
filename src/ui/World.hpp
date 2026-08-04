@@ -1,39 +1,66 @@
 #pragma once
+#include <QObject>
+#include <QQmlEngine>
+#include <QPointF>
+#include <iostream>
 
-#include <QPoint>
-#include <QWindow>
-#include <cmath>
+class World : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QPointF pan READ getPan WRITE setPan NOTIFY panChanged)
 
-class World {
-    public:
-        static World &instance() {
-            static World sInstance;
-            return sInstance;
-        }
+public:
+    explicit World(QObject *parent = nullptr) : QObject(parent) {
+        std::cout << "world constructed at " << this << std::endl;
+    }
 
-        World() = default;
-        ~World() = default;
-        World(const World &other) = delete;
-        World(World &&other) = delete;
-        const World &operator=(const World &other) = delete;
-        World &operator=(World &&other) = delete;
+    inline static World *s_instance = nullptr;
 
-        int     gridSize            = { 128 }; // px per grid unit
-        int     worldWidthUnits     = { 300 };
-        int     worldHeightUnits    = { 200 };
-        float   zoom                = { 1 };
-        QPointF pan                 = { 0, 0 };
-        QPointF center              = { QPointF(worldWidthUnits / 2, worldHeightUnits / 2) };
+    static World &instance() {
+        Q_ASSERT(s_instance);
+        return *s_instance;
+    }
 
-        QPoint coordToPx(QPoint coord) {
-            return QPoint((coord.x() - pan.x()) * gridSize * zoom,
-                          (coord.y() - pan.y()) * gridSize * zoom);
-        }
+    int     gridSize            = { 128 };
+    int     worldWidthUnits     = { 300 };
+    int     worldHeightUnits    = { 200 };
+    float   zoom                = { 1 };
+    QPointF pan                 = { 0, 0 };
 
-        QPointF pxToCoord(QPoint px) {
-            return QPointF(px.x() / ((qreal)gridSize * zoom) + pan.x(),
-                           px.y() / ((qreal)gridSize * zoom) + pan.y());
-        }
+    Q_INVOKABLE QPoint coordToPx(QPoint coord);
+    Q_INVOKABLE QPointF pxToCoord(QPoint px);
+    Q_INVOKABLE void calculateNewPan(QPoint mousePos, QPoint mouseInitPos);
 
-        void calculateNewPan(QPointF mousePos, QPointF mouseInitPos);
+    Q_INVOKABLE QPointF getPan() { return this->pan; }
+    World const &setPan(QPointF newPan) { pan = newPan; return *this; }
+
+signals:
+    void panChanged();
+};
+
+// --- Separate foreign registration type ---
+struct WorldForeign
+{
+    Q_GADGET
+    QML_FOREIGN(World)
+    QML_SINGLETON
+    QML_NAMED_ELEMENT(World)
+
+public:
+    static World *create(QQmlEngine *, QJSEngine *engine)
+    {
+        std::cout << "create called" << std::endl;
+        Q_ASSERT(World::s_instance);
+        Q_ASSERT(engine->thread() == World::s_instance->thread());
+        if (s_engine)
+            Q_ASSERT(engine == s_engine);
+        else
+            s_engine = engine;
+
+        QQmlEngine::setObjectOwnership(World::s_instance, QQmlEngine::CppOwnership);
+        return World::s_instance;
+    }
+
+private:
+    inline static QJSEngine *s_engine = nullptr;
 };

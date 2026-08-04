@@ -3,173 +3,114 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import synth 1.0
 
-Item {
-    id: rootItem
-    property var engine: null; // -> access to c++ qt wrapper
-
-    anchors.centerIn: parent;
+Module {
+    id: mixer4
+    engine: mixer4Engine
+    title: "MIXER"
 
     Rectangle {
-        id: env
-        width: 150
-        height: 500
-        radius: 10
-        border.color: "black"
-        border.width: 2
+        width: parent.width * 0.5
+        height: parent.height * 0.30
         anchors.centerIn: parent
 
-        Text {
-            id: title
-            text: "MIXER 4"
-            font.pointSize: 24
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 20
-            z: 100;
-        }
+        RowLayout {
+            anchors.fill: parent
+            spacing: 5
+                ColumnLayout {
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 5
 
-        MultiEffect {
-            source: env
-            anchors.fill: env
+                    VSlider {
+                        from: 0
+                        to: 1;
+                        value: {mixer4.engine ? mixer4.engine.gain0 : 1}
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        onValueChanged: {if (mixer4.engine) mixer4.engine.gain0 = value}
+                    }
 
-            shadowEnabled: true
-            shadowBlur: 0.8
-            shadowVerticalOffset: 4
-            shadowHorizontalOffset: 2
-            shadowColor: "#30000000"
-        }
-
-        MouseArea {
-            anchors.fill: parent        // couvre tout le rectangle
-            pressAndHoldInterval: 100
-
-            cursorShape: CablesSingleton.currentCursor
-
-            property bool dragging: false
-            property real startX: 0
-            property real startY: 0
-
-            onPressAndHold: {
-                dragging = true
-                env.anchors.centerIn = undefined
-            }
-
-            onPositionChanged: function(mouse) {
-                if (dragging) {
-                    env.x += mouse.x - startX
-                    env.y += mouse.y - startY
+                    Text {
+                        text: "1";
+                        Layout.alignment: Qt.AlignHCenter
+                    }
                 }
-            }
+                ColumnLayout {
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 5
 
-            onReleased: {
-                dragging = false
-            }
-        }
-
-        Rectangle {
-            width: parent.width * 0.5
-            height: parent.height * 0.30
-            anchors.centerIn: parent
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 5
-                    ColumnLayout {
+                    VSlider {
+                        from: 0
+                        to: 1;
+                        value: {mixer4.engine ? mixer4.engine.gain1 : 1}
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter
-                        spacing: 5
-
-                        VSlider {
-                            from: 0
-                            to: 1;
-                            value: {engine ? engine.gain0 : 1}
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.gain0 = value}
-                        }
-
-                        Text {
-                            text: "1";
-                            Layout.alignment: Qt.AlignHCenter
-                        }
+                        onValueChanged: {if (mixer4.engine) mixer4.engine.gain1 = value}
                     }
-                    ColumnLayout {
-                        Layout.fillHeight: true
+
+                    Text {
+                        text: "2";
                         Layout.alignment: Qt.AlignHCenter
-                        spacing: 5
-
-                        VSlider {
-                            from: 0
-                            to: 1;
-                            value: {engine ? engine.gain1 : 1}
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.gain1 = value}
-                        }
-
-                        Text {
-                            text: "2";
-                            Layout.alignment: Qt.AlignHCenter
-                        }
                     }
-                    ColumnLayout {
+                }
+                ColumnLayout {
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 5
+
+                    VSlider {
+                        from: 0
+                        to: 1;
+                        value: {mixer4.engine ? mixer4.engine.gain2 : 1}
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter
-                        spacing: 5
-
-                        VSlider {
-                            from: 0
-                            to: 1;
-                            value: {engine ? engine.gain2 : 1}
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.gain2 = value}
-                        }
-
-                        Text {
-                            text: "3";
-                            Layout.alignment: Qt.AlignHCenter
-                        }
+                        onValueChanged: {if (mixer4.engine) mixer4.engine.gain2 = value}
                     }
-                    ColumnLayout {
+
+                    Text {
+                        text: "3";
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                }
+                ColumnLayout {
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 5
+
+                    VSlider {
+                        from: 0
+                        to: 1;
+                        value: {mixer4.engine ? mixer4.engine.gain3 : 1}
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter
-                        spacing: 5
-
-                        VSlider {
-                            from: 0
-                            to: 1;
-                            value: {engine ? engine.gain3 : 1}
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            onValueChanged: {if (engine) engine.gain3 = value}
-                        }
-                        Text {
-                            text: "4";
-                            Layout.alignment: Qt.AlignHCenter
-                        }
+                        onValueChanged: {if (mixer4.engine) mixer4.engine.gain3 = value}
+                    }
+                    Text {
+                        text: "4";
+                        Layout.alignment: Qt.AlignHCenter
                     }
                 }
             }
+        }
 
-        Rectangle {
-            id: connectors
-            width: parent.width * 0.75
-            height: parent.height / 8
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
+    Rectangle {
+        id: connectors
+        width: parent.width * 0.75
+        height: parent.height / 8
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
 
-            GridLayout {
-                width: parent.width
-                columns: 4
-                columnSpacing: 10
+        GridLayout {
+            width: parent.width
+            columns: 4
+            columnSpacing: 10
 
-                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput0"; label: "1" }
-                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput1"; label: "2" }
-                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput2"; label: "3" }
-                Jack { Layout.fillWidth: true; engine: rootItem.engine; port: "audioInput3"; label: "4" }
-            }
+            Jack { Layout.fillWidth: true; engine: mixer4.engine; port: "audioInput0"; label: "1" }
+            Jack { Layout.fillWidth: true; engine: mixer4.engine; port: "audioInput1"; label: "2" }
+            Jack { Layout.fillWidth: true; engine: mixer4.engine; port: "audioInput2"; label: "3" }
+            Jack { Layout.fillWidth: true; engine: mixer4.engine; port: "audioInput3"; label: "4" }
         }
     }
 }

@@ -1,6 +1,6 @@
 #include "DrawArea.hpp"
 // #include <qjsengine.h>
-// #include <iostream>
+#include <iostream>
 
 DrawArea::DrawArea(QQuickItem *parent) : QQuickPaintedItem(parent) {
     // GPU-resident FBO instead of CPU QImage -> avoids the upload memcpy
@@ -25,6 +25,7 @@ void DrawArea::paintGrid(QPainter *painter) {
     for (int x = 0; ; x++) {
         QPoint beginLinePx;
         QPoint endLinePx;
+        // std::cout << World::instance() << std::endl;
         beginLinePx = World::instance().coordToPx(QPoint(x, 0));
         endLinePx = World::instance().coordToPx(QPoint(x, winHeight));
         if (beginLinePx.x() > winWidth || endLinePx.x() > winWidth)
@@ -68,12 +69,12 @@ void DrawArea::paint(QPainter *painter) {
         passthrough(points, 5.0f, painter, &pen);
 
         pen.setColor(QColor(cableMap["color"].toString()));
-        pen.setWidth(15); // 8
+        pen.setWidth(10); // 8
         passthrough(points, 0, painter, &pen);
 
         pen.setColor(QColor(255, 255, 255, 87));
         pen.setWidth(2);
-        passthrough(points, -1.6f, painter, &pen);
+        passthrough(points, -3.0f, painter, &pen); // 1.6
 
         // if (i == points.size() - 1)
         //     i = 0;

@@ -82,14 +82,11 @@ Window {
 
     DrawArea {
         id: gridCanvas
-        width: rootWindow.windowWidth
-        height: rootWindow.windowHeight
+        width: rootWindow.width
+        height: rootWindow.height
         anchors.fill: parent
-        anchors.margins: 10
         z: -1;
 
-        // property var cables: CablesSingleton.cables
-        // property var canvas: CanvasSingleton.canvas
         property int wheelAcc: 0;
         property var gridPaint: {gridCanvas.setGridBool(true);};
 
@@ -101,19 +98,18 @@ Window {
             property int initPosX: 0;
             property int initPosY: 0;
             property bool initPos: false;
-            // Drag.active: mouseArea.drag.active
+
+            onPressed: function(mouse) {
+                initPosX = mouse.x;
+                initPosY = mouse.y;
+            }
 
             onPositionChanged: function(mouse) {
-                if (pressed) {
-                    if (initPos == false) {
-                        initPosX = mouse.x;
-                        initPosY = mouse.y;
-                        initPos = true;
-                    }
-                    gridCanvas.setPan({x: mouse.x, y: mouse.y}, {x: initPosX, y: initPosY});
-                }
+                gridCanvas.setPan({x: mouse.x, y: mouse.y}, {x: initPosX, y: initPosY});
+                initPosX = mouse.x;
+                initPosY = mouse.y;
             }
-            onReleased: { initPos = false; }
+
             onWheel: (event) => {
                 console.log(event.angleDelta.y);
                 gridCanvas.wheelAcc += event.angleDelta.y;
@@ -124,21 +120,6 @@ Window {
                 }
             }
         }
-
-        // function update() {
-        //     cables.forEach(cable => {
-        //         if (!cable || !cable.source || !cable.target) {
-        //             console.log("skipping invalid cable this frame");
-        //             return; // just skips this one cable, forEach continues to the next
-        //         }
-        //         const sourcePos = cable.source.mapToItem(canvas, cable.source.width / 2, cable.source.height / 2);
-        //         cable.pinEnd(0, sourcePos.x, sourcePos.y);
-        //         const targetPos = cable.target.mapToItem(canvas, cable.target.width / 2, cable.target.height / 2);
-        //         cable.pinEnd(1, targetPos.x, targetPos.y);
-        //         cable.update();
-        //     });
-        //     gridCanvas.setCables(cables);
-        // }
     }
 
     DrawArea {
@@ -151,39 +132,6 @@ Window {
 
         property var cables: CablesSingleton.cables
         property var canvas: CanvasSingleton.canvas
-        // property int wheelAcc: 0;
-
-        // MouseArea {
-        //     id: cableMouseArea
-        //     width: parent.width
-        //     height: parent.height
-
-        //     property int initPosX: 0;
-        //     property int initPosY: 0;
-        //     property bool initPos: false;
-        //     // Drag.active: mouseArea.drag.active
-
-        //     onPositionChanged: function(mouse) {
-        //         if (pressed) {
-        //             if (initPos == false) {
-        //                 initPosX = mouse.x;
-        //                 initPosY = mouse.y;
-        //                 initPos = true;
-        //             }
-        //             cableCanvas.setPan({x: mouse.x, y: mouse.y}, {x: initPosX, y: initPosY});
-        //         }
-        //     }
-        //     onReleased: { initPos = false; }
-        //     onWheel: (event) => {
-        //         console.log(event.angleDelta.y);
-        //         cableCanvas.wheelAcc += event.angleDelta.y;
-        //         if (cableCanvas.wheelAcc > 120 || cableCanvas.wheelAcc < -120) {
-        //             if (event.angleDelta.y < 0) cableCanvas.zoomOut();
-        //             else cableCanvas.zoomIn();
-        //             cableCanvas.wheelAcc = 0;
-        //         }
-        //     }
-        // }
 
         function update() {
             cables.forEach(cable => {
@@ -200,7 +148,6 @@ Window {
             cableCanvas.setCables(cables);
         }
     }
-
 
     Timer {
         interval: 16

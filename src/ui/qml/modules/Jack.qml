@@ -33,8 +33,8 @@ Item {
 
     Rectangle {
         id: jack
-        width: 30
-        height: 30
+        width: 20
+        height: 20
         radius: width / 2
         border.color: "black"
         border.width: 2
@@ -127,12 +127,12 @@ Item {
                 const res = proxy.Drag.drop();
                 if (!res) { // delete cable
                     const cable = container.localCables[localCables.length - 1];
-                    console.log("length before = ", localCables.length);
-                    console.log("cable = ", cable);
-                    if (cable.sourceContainer && cable.targetContainer) {
-                        console.log(cable.sourceContainer, cable.targetContainer);
-                        console.log(cable.sourceContainer.engine, cable.targetContainer.engine);
-                    }
+                    // console.log("length before = ", localCables.length);
+                    // console.log("cable = ", cable);
+                    // if (cable.sourceContainer && cable.targetContainer) {
+                        // console.log(cable.sourceContainer, cable.targetContainer);
+                        // console.log(cable.sourceContainer.engine, cable.targetContainer.engine);
+                    // }
                     if (cable.targetContainer) {
                         engine.disconnectionRequest(
                             cable.sourceContainer.engine,
