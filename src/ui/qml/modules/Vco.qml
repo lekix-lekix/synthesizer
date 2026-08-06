@@ -10,8 +10,8 @@ Module {
 
     Knob {
         label: "freq";
-        width: 100;
-        height: 100;
+        width: parent.width * 0.5;
+        height: parent.width * 0.5;
         anchors.horizontalCenter: parent.horizontalCenter;
         anchors.verticalCenter: parent.verticalCenter;
         anchors.verticalCenterOffset: -50;

@@ -17,11 +17,11 @@ Window {
 
     onWidthChanged: {
         windowWidth = width;
-        /*cableCanvas.width = */gridCanvas.width = width;
+        gridCanvas.width = width;
     }
     onHeightChanged: {
         windowHeight = height;
-        /*cableCanvas.height = */gridCanvas.height = height;
+        gridCanvas.height = height;
     }
 
     Item {
@@ -111,11 +111,11 @@ Window {
             }
 
             onWheel: (event) => {
-                console.log(event.angleDelta.y);
+                // console.log(event.angleDelta.y);
                 gridCanvas.wheelAcc += event.angleDelta.y;
                 if (gridCanvas.wheelAcc > 120 || gridCanvas.wheelAcc < -120) {
-                    if (event.angleDelta.y < 0) gridCanvas.zoomOut();
-                    else gridCanvas.zoomIn();
+                    if (event.angleDelta.y < 0) World.zoomOut();
+                    else World.zoomIn();
                     gridCanvas.wheelAcc = 0;
                 }
             }

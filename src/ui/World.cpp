@@ -18,11 +18,11 @@ void World::calculateNewPan(QPoint mousePos, QPoint mouseInitPos) {
 }
 
 Q_INVOKABLE QPoint World::coordToPx(QPoint coord) {
-    return QPoint((coord.x() + pan.x()) * gridSize * zoom,
-                  (coord.y() + pan.y()) * gridSize * zoom);
+    return QPoint((coord.x() + pan.x()) * gridUnit * zoom,
+                  (coord.y() + pan.y()) * gridUnit * zoom);
 }
 
 Q_INVOKABLE QPointF World::pxToCoord(QPoint px) {
-    return QPointF(px.x() / ((qreal)gridSize * zoom) - pan.x(),
-                   px.y() / ((qreal)gridSize * zoom) - pan.y());
+    return QPointF(px.x() / ((qreal)gridUnit * zoom) - pan.x(),
+                   px.y() / ((qreal)gridUnit * zoom) - pan.y());
 }

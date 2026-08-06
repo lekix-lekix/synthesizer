@@ -9,7 +9,7 @@ DrawArea::DrawArea(QQuickItem *parent) : QQuickPaintedItem(parent) {
     setAntialiasing(true);
 }
 
-void DrawArea::paintGrid(QPainter *painter) {
+void DrawArea::paintLinesGrid(QPainter *painter) {
     QWindowList windows = QGuiApplication::allWindows();
     QWindow *window = windows.first();
     int winWidth = window->width();
@@ -46,23 +46,63 @@ void DrawArea::paintGrid(QPainter *painter) {
     painter->drawLines(lines);
 }
 
-void DrawArea::paint(QPainter *painter) {
-    painter->setRenderHint(QPainter::Antialiasing);
+void DrawArea::paintGrid(QPainter *painter) {
+    QWindowList windows = QGuiApplication::allWindows();
+    QWindow *window = windows.first();
+    int winWidth = window->width();
+    int winHeight = window->height();
 
-    if (gridBool_ == true) {
-        paintGrid(painter);
-        update();
-        return ;
+    QPen pen(QColor("grey"));
+
+    pen.setWidth(2);
+    painter->setPen(pen);
+
+    const int crossSize = 6; // half-length of each arm, in px
+
+    bool stopLoop = false;
+    for (int y = 0; !stopLoop; y++) {
+        for (int x = 0; !stopLoop; x++) {
+            QPoint pt = World::instance().coordToPx({x, y});
+
+            if (x == 0 && y == 0) {
+                pen.setStyle(Qt::DashLine);
+                painter->setPen(pen);
+                painter->drawLine(pt.x(), pt.y(), winWidth, pt.y());
+                painter->drawLine(pt.x(), pt.y(), pt.x(), winHeight);
+                pen.setStyle(Qt::SolidLine);
+                painter->setPen(pen);
+                continue ;
+            }
+
+            if (pt.y() > winHeight) {
+                stopLoop = true ;
+                break;
+            }
+            if (pt.x() > winWidth)
+                break;
+
+            if (x == 0) // horizontal arm
+                painter->drawLine(pt.x() + crossSize, pt.y(), pt.x(), pt.y());
+            else
+                painter->drawLine(pt.x() - crossSize, pt.y(), pt.x() + crossSize, pt.y());
+            if (y == 0) // vertical arm
+                painter->drawLine(pt.x(), pt.y() + crossSize, pt.x(), pt.y());
+            else
+                painter->drawLine(pt.x(), pt.y() - crossSize, pt.x(), pt.y() + crossSize);
+        }
     }
+}
 
+void DrawArea::paintCables(QPainter *painter) {
     QPen pen;
+
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setJoinStyle(Qt::RoundJoin);
+
     for (auto &c: cables_) {
         QVariantMap cableMap = c.toMap();
         QVariantList pointsVList = cableMap["points"].toList();
         std::vector<QPointF> points = getPointsFromVList(pointsVList);
-
-        pen.setCapStyle(Qt::RoundCap);
-        pen.setJoinStyle(Qt::RoundJoin);
 
         pen.setColor(QColor(0, 0, 0, 64)); // shadow
         pen.setWidth(14); // 7
@@ -75,19 +115,19 @@ void DrawArea::paint(QPainter *painter) {
         pen.setColor(QColor(255, 255, 255, 87));
         pen.setWidth(2);
         passthrough(points, -3.0f, painter, &pen); // 1.6
-
-        // if (i == points.size() - 1)
-        //     i = 0;
-
-        // pen.setColor(Qt::white);
-        // QPainterPath path;
-        // int x = points[i].x();
-        // int y = points[i].y();
-        // path.moveTo(x, y);
-        // path.arcTo(QRectF(x, y, 10, 10), 0, 360);
-        // painter->strokePath(path, pen);
-        // i++;
     }
+}
+
+void DrawArea::paint(QPainter *painter) {
+    painter->setRenderHint(QPainter::Antialiasing);
+
+    if (gridBool_ == true) {
+        paintGrid(painter);
+        update();
+        return ;
+    }
+
+    paintCables(painter);
     update();
 }
 

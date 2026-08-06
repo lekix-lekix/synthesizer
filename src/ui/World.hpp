@@ -8,6 +8,8 @@ class World : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QPointF pan READ getPan WRITE setPan NOTIFY panChanged)
+    Q_PROPERTY(int gridUnit READ getGridUnit WRITE setGridUnit NOTIFY gridUnitChanged)
+    Q_PROPERTY(float zoom READ getZoom WRITE setZoom NOTIFY zoomChanged)
 
 public:
     explicit World(QObject *parent = nullptr) : QObject(parent) {
@@ -21,7 +23,7 @@ public:
         return *s_instance;
     }
 
-    int     gridSize            = { 128 };
+    int     gridUnit            = { 128 };
     int     worldWidthUnits     = { 300 };
     int     worldHeightUnits    = { 200 };
     float   zoom                = { 1 };
@@ -31,11 +33,21 @@ public:
     Q_INVOKABLE QPointF pxToCoord(QPoint px);
     Q_INVOKABLE void calculateNewPan(QPoint mousePos, QPoint mouseInitPos);
 
-    Q_INVOKABLE QPointF getPan() { return this->pan; }
+    Q_INVOKABLE QPointF getPan()        { return this->pan; }
+    Q_INVOKABLE int     getGridUnit()   { return this->gridUnit; }
+    Q_INVOKABLE float   getZoom()       { return this->zoom; };
+
     World const &setPan(QPointF newPan) { pan = newPan; return *this; }
+    Q_INVOKABLE void    setGridUnit(int newUnit) { this->gridUnit = newUnit; }
+    Q_INVOKABLE void    setZoom(float newZoom) { this->zoom = newZoom; }
+
+    Q_INVOKABLE void zoomIn()  { this->zoom *= 1.1; emit zoomChanged(); };
+    Q_INVOKABLE void zoomOut() { this->zoom *= 0.9; emit zoomChanged(); };
 
 signals:
     void panChanged();
+    void zoomChanged();
+    void gridUnitChanged();
 };
 
 // --- Separate foreign registration type ---
